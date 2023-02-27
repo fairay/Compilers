@@ -8,10 +8,10 @@ class Term:
     def nullable(self) -> bool:
         return True
 
-    def firstpos(self) -> set:
+    def firstpos(self) -> set[int]:
         return set()
 
-    def lastpos(self) -> set:
+    def lastpos(self) -> set[int]:
         return set()
 
 
@@ -77,9 +77,10 @@ class RepeatTerm(Term):
 
 
 class Literal(Term):
-    def __init__(self, char: str):
+    def __init__(self, char: str, index: int):
         super().__init__()
         self.char = char
+        self.index = index + 1
 
     def __repr__(self):
         return f"{self.char}"
@@ -88,10 +89,15 @@ class Literal(Term):
         return False
 
     def firstpos(self) -> set:
-        return {self.char}
+        return {self.index}
 
     def lastpos(self) -> set:
-        return {self.char}
+        return {self.index}
+
+
+class EndLiteral(Literal):
+    def __init__(self, index: int):
+        super(EndLiteral, self).__init__('#', index)
 
 
 class Operation(Enum):
@@ -102,6 +108,7 @@ class Operation(Enum):
 class Parser:
     def __init__(self, s: str):
         self.ind = 0
+        self.node_n = 0
         self.s = s
 
     def _parse_terms(self):
@@ -117,7 +124,8 @@ class Parser:
             elif self.cur == '|':
                 term = Operation.CHOICE
             else:
-                term = Literal(self.cur)
+                term = Literal(self.cur, self.node_n)
+                self.node_n += 1
 
             terms.append(term)
             self.ind += 1
@@ -161,7 +169,6 @@ class Parser:
         terms = self._repeat(terms)
         terms = self._concat(terms)
         terms = self._choice(terms)
-        print(terms)
         return terms[0]
 
     @property
@@ -169,14 +176,24 @@ class Parser:
         return self.s[self.ind]
 
 
+def parse(s: str):
+    s = f'({s})'
+    parser = Parser(s)
+    root = parser.parse()
+    return ConcatTerm(root, EndLiteral(parser.node_n))
+
+
 def main():
     exp = "(ab(cde)*(fg)hi)"
     exp = "(ab*c(ab)*)"
     exp = "(c(ab|c*a(b|c))*|bc*)"
+    exp = "((a|b)*abb)"
 
     parser = Parser(exp)
     print(exp)
-    print(parser.parse())
+    tree = parser.parse()
+    print(tree)
+    print(tree.firstpos(), tree.lastpos())
 
 
 if __name__ == '__main__':
