@@ -58,32 +58,32 @@ class DFA:
         return R1, R2
 
     def _minimalize(self):
-        P: list[set[int]] = []
-        S = []
+        groups: list[set[int]] = []
+        pairs = []
 
         def add_group(group: set[int]):
-            P.append(group)
+            groups.append(group)
             for c in self.alphabet:
-                S.append((group, c))
+                pairs.append((group, c))
 
         def remove_group(group: set[int]):
-            nonlocal S
-            P.remove(group)
-            S = [s for s in S if s[0] != group]
+            nonlocal pairs
+            groups.remove(group)
+            pairs = [pair for pair in pairs if pair[0] != group]
 
         add_group(self._finite_states)
         add_group(self.states.difference(self._finite_states))
 
-        while len(S):
-            C, a = S.pop(0)
-            for R in P:
+        while len(pairs):
+            C, a = pairs.pop(0)
+            for R in groups:
                 R1, R2 = self._split(R, C, a)
                 if R1 and R2:
                     remove_group(R)
                     add_group(R1)
                     add_group(R2)
                     break
-        return P
+        return groups
 
     def minimalize(self):
         state_groups = self._minimalize()
