@@ -43,7 +43,7 @@ class DFA:
             if state is None:
                 _print('[no such transition]')
                 return False
-        _print(f'│{state}─ "{input_str}" ', end='')
+        _print(f'│{state}─ "{input_str}" ')
         return state in self._finite_states
 
     def _split(self, R: set[int], C: set[int], a: str):
@@ -182,7 +182,12 @@ def dfa_from_tree(root: Term):
 
 
 def build_dfa(exp: str):
-    root = parse(exp)
+    try:
+        root = parse(exp)
+    except Exception:
+        print('invalid regexp')
+        return
+
     raw_dfa = dfa_from_tree(root)
     min_dfa = raw_dfa.minimalize()
     return min_dfa
