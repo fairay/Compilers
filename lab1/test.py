@@ -13,6 +13,8 @@ from dfa import build_dfa, DFA
         ("babba", False),
         ("", False),
         ("bb", False),
+        ("ababbababb", True),
+        ("ababbabab", False)
     ]
 )
 def test_validate(message, is_valid):
