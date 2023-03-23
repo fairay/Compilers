@@ -1,0 +1,42 @@
+{
+    "grammar": {
+        "name": "G0",
+        "term_symbols": [
+            {"name": "IDENT", "spell": "a"},
+            {"name": "ADD", "spell": "+"},
+            {"name": "MUL", "spell": "*"},
+            {"name": "LPAREN", "spell": "("},
+            {"name": "RPAREN", "spell": ")"}
+        ],
+        "non_term_symbols": [
+            {"name": "E"}, {"name": "T"}, {"name": "F"}
+        ],
+        "productions": [
+            {
+                "lhs": "E",
+                "rhs": ["E", "ADD", "T"]
+            },
+            {
+                "lhs": "E",
+                "rhs": ["T"]
+            },
+            {
+                "lhs": "T",
+                "rhs": ["T", "MUL", "F"]
+            },
+            {
+                "lhs": "T",
+                "rhs": ["F"]
+            },
+            {
+                "lhs": "F",
+                "rhs": ["IDENT"]
+            },
+            {
+                "lhs": "F",
+                "rhs": ["LPAREN", "E","RPAREN"]
+            }
+        ],
+        "start_symbol": {"name": "E"}
+    }
+}
