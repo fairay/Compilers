@@ -4,7 +4,7 @@ import json
 
 
 def main():
-    with open("data4.json", "r") as f:
+    with open("data.json", "r") as f:
         data = json.load(f)
     result = from_dict(data_class=Grammar, data=data["grammar"])
 

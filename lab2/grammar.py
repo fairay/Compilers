@@ -179,12 +179,21 @@ def chomsky_normal_form(old_g: Grammar) -> Grammar:
     index = 0
     while index < len(g.productions):
         p = g.productions[index]
+        lhs = p.lhs
         # S -> e
-        if p.lhs == g.start_symbol and len(p.rhs) == 0:
+        if lhs == g.start_symbol and len(p.rhs) == 0:
             pass
         # A -> a
         elif len(p.rhs) == 1 and p.rhs[0].type == 'term':
             pass
+        # A -> B
+        elif len(p.rhs) == 1 and p.rhs[0].type == 'nonterm':
+            rhs = p.rhs[0]
+            rhs_plist = g.symbol_production(rhs)
+            for rhs_p in rhs_plist:
+               g.add_production(lhs, rhs_p.rhs)
+            g.remove_production(p)
+            index -= 1
         # A -> ??
         elif len(p.rhs) == 2:
             for i, s in enumerate(p.rhs):
@@ -194,7 +203,6 @@ def chomsky_normal_form(old_g: Grammar) -> Grammar:
                     p.rhs[i] = nt_s
         # A -> ?...?
         else:
-            lhs = p.lhs
             for i in range(len(p.rhs)-2):
                 new_nt = g.get_compressed_nt(p.rhs[i+1:])
                 g.add_production(lhs, [p.rhs[i], new_nt])
