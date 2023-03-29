@@ -1,0 +1,200 @@
+{
+    "term_symbols": [
+        {
+            "name": "a",
+            "spell": "a",
+            "type": "term"
+        },
+        {
+            "name": "b",
+            "spell": "b",
+            "type": "term"
+        },
+        {
+            "name": "c",
+            "spell": "c",
+            "type": "term"
+        },
+        {
+            "name": "d",
+            "spell": "d",
+            "type": "term"
+        }
+    ],
+    "non_term_symbols": [
+        {
+            "name": "S",
+            "spell": "S",
+            "type": "nonterm"
+        },
+        {
+            "name": "A",
+            "spell": "A",
+            "type": "nonterm"
+        },
+        {
+            "name": "A'",
+            "spell": "A'",
+            "type": "nonterm"
+        }
+    ],
+    "productions": [
+        {
+            "lhs": {
+                "name": "S",
+                "spell": "S",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "A",
+                    "spell": "A",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "a",
+                    "spell": "a",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "S",
+                "spell": "S",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "b",
+                    "spell": "b",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A",
+                "spell": "A",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "b",
+                    "spell": "b",
+                    "type": "term"
+                },
+                {
+                    "name": "d",
+                    "spell": "d",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A",
+                "spell": "A",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "b",
+                    "spell": "b",
+                    "type": "term"
+                },
+                {
+                    "name": "d",
+                    "spell": "d",
+                    "type": "term"
+                },
+                {
+                    "name": "A'",
+                    "spell": "A'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A'",
+                "spell": "A'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "c",
+                    "spell": "c",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A'",
+                "spell": "A'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "c",
+                    "spell": "c",
+                    "type": "term"
+                },
+                {
+                    "name": "A'",
+                    "spell": "A'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A'",
+                "spell": "A'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "a",
+                    "spell": "a",
+                    "type": "term"
+                },
+                {
+                    "name": "d",
+                    "spell": "d",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "A'",
+                "spell": "A'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "a",
+                    "spell": "a",
+                    "type": "term"
+                },
+                {
+                    "name": "d",
+                    "spell": "d",
+                    "type": "term"
+                },
+                {
+                    "name": "A'",
+                    "spell": "A'",
+                    "type": "nonterm"
+                }
+            ]
+        }
+    ],
+    "start_symbol": {
+        "name": "S",
+        "spell": "S",
+        "type": ""
+    }
+}

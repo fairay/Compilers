@@ -1,38 +1,35 @@
 {
-    "grammar": {
-        "name": "G0",
-        "term_symbols": [
-            {"name": "a"}, {"name": "b"}
-        ],
-        "non_term_symbols": [
-            {"name": "S"}, {"name": "A"}, {"name": "B"}
-        ],
-        "productions": [
-            {
-                "lhs": "S",
-                "rhs": ["a", "A", "B"]
-            },
-            {
-                "lhs": "S",
-                "rhs": ["B", "A"]
-            },
-            {
-                "lhs": "A",
-                "rhs": ["B", "B", "B"]
-            },
-            {
-                "lhs": "A",
-                "rhs": ["a"]
-            },
-            {
-                "lhs": "B",
-                "rhs": ["A", "S"]
-            },
-            {
-                "lhs": "B",
-                "rhs": ["b"]
-            }
-        ],
-        "start_symbol": {"name": "S"}
-    }
+    "term_symbols": [
+        {"name": "a"}, {"name": "b"}
+    ],
+    "non_term_symbols": [
+        {"name": "S"}, {"name": "A"}, {"name": "B"}
+    ],
+    "productions": [
+        {
+            "lhs": "S",
+            "rhs": ["a", "A", "B"]
+        },
+        {
+            "lhs": "S",
+            "rhs": ["B", "A"]
+        },
+        {
+            "lhs": "A",
+            "rhs": ["B", "B", "B"]
+        },
+        {
+            "lhs": "A",
+            "rhs": ["a"]
+        },
+        {
+            "lhs": "B",
+            "rhs": ["A", "S"]
+        },
+        {
+            "lhs": "B",
+            "rhs": ["b"]
+        }
+    ],
+    "start_symbol": {"name": "S"}
 }

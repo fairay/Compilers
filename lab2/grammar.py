@@ -2,7 +2,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class Symbol:
     name: str
     spell: str = ""
@@ -33,10 +33,13 @@ class NonTermSymbol(Symbol):
         super().__post_init__()
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class Production:
     lhs: Symbol | str
     rhs: list[Symbol] | list[str]
+
+    def to_str(self):
+        return (self.lhs.name, " ".join(s.name for s in self.rhs))
 
 
 @dataclass

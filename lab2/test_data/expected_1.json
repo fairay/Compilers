@@ -1,0 +1,253 @@
+{
+    "term_symbols": [
+        {
+            "name": "IDENT",
+            "spell": "a",
+            "type": "term"
+        },
+        {
+            "name": "ADD",
+            "spell": "+",
+            "type": "term"
+        },
+        {
+            "name": "MUL",
+            "spell": "*",
+            "type": "term"
+        },
+        {
+            "name": "LPAREN",
+            "spell": "(",
+            "type": "term"
+        },
+        {
+            "name": "RPAREN",
+            "spell": ")",
+            "type": "term"
+        }
+    ],
+    "non_term_symbols": [
+        {
+            "name": "E",
+            "spell": "E",
+            "type": "nonterm"
+        },
+        {
+            "name": "T",
+            "spell": "T",
+            "type": "nonterm"
+        },
+        {
+            "name": "F",
+            "spell": "F",
+            "type": "nonterm"
+        },
+        {
+            "name": "E'",
+            "spell": "E'",
+            "type": "nonterm"
+        },
+        {
+            "name": "T'",
+            "spell": "T'",
+            "type": "nonterm"
+        }
+    ],
+    "productions": [
+        {
+            "lhs": {
+                "name": "E",
+                "spell": "E",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "T",
+                    "spell": "T",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "E",
+                "spell": "E",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "T",
+                    "spell": "T",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "E'",
+                    "spell": "E'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "E'",
+                "spell": "E'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "ADD",
+                    "spell": "+",
+                    "type": "term"
+                },
+                {
+                    "name": "T",
+                    "spell": "T",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "E'",
+                "spell": "E'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "ADD",
+                    "spell": "+",
+                    "type": "term"
+                },
+                {
+                    "name": "T",
+                    "spell": "T",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "E'",
+                    "spell": "E'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "T",
+                "spell": "T",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "F",
+                    "spell": "F",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "T",
+                "spell": "T",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "F",
+                    "spell": "F",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "T'",
+                    "spell": "T'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "T'",
+                "spell": "T'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "MUL",
+                    "spell": "*",
+                    "type": "term"
+                },
+                {
+                    "name": "F",
+                    "spell": "F",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "T'",
+                "spell": "T'",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "MUL",
+                    "spell": "*",
+                    "type": "term"
+                },
+                {
+                    "name": "F",
+                    "spell": "F",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "T'",
+                    "spell": "T'",
+                    "type": "nonterm"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "F",
+                "spell": "F",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "IDENT",
+                    "spell": "a",
+                    "type": "term"
+                }
+            ]
+        },
+        {
+            "lhs": {
+                "name": "F",
+                "spell": "F",
+                "type": "nonterm"
+            },
+            "rhs": [
+                {
+                    "name": "LPAREN",
+                    "spell": "(",
+                    "type": "term"
+                },
+                {
+                    "name": "E",
+                    "spell": "E",
+                    "type": "nonterm"
+                },
+                {
+                    "name": "RPAREN",
+                    "spell": ")",
+                    "type": "term"
+                }
+            ]
+        }
+    ],
+    "start_symbol": {
+        "name": "E",
+        "spell": "E",
+        "type": ""
+    }
+}

@@ -6,7 +6,7 @@ import json
 def main():
     with open("data.json", "r") as f:
         data = json.load(f)
-    result = from_dict(data_class=Grammar, data=data["grammar"])
+    result = from_dict(data_class=Grammar, data=data)
 
     print(result)
     result.print()
