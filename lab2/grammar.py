@@ -33,7 +33,7 @@ class NonTermSymbol(Symbol):
         super().__post_init__()
 
 
-@dataclass(unsafe_hash=True)
+@dataclass
 class Production:
     lhs: Symbol | str
     rhs: list[Symbol] | list[str]

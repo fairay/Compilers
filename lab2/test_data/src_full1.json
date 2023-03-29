@@ -1,0 +1,23 @@
+{
+    "term_symbols": [
+        {"name": "a"}, {"name": "b"}, {"name": "c"}
+    ],
+    "non_term_symbols": [
+        {"name": "S"}, {"name": "A"}
+    ],
+    "productions": [
+        {
+            "lhs": "S",
+            "rhs": ["S", "a"]
+        },
+        {
+            "lhs": "S",
+            "rhs": ["S", "b", "S"]
+        },
+        {
+            "lhs": "A",
+            "rhs": ["A", "c"]
+        }
+    ],
+    "start_symbol": {"name": "S"}
+}
