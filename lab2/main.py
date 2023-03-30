@@ -4,15 +4,15 @@ import json
 
 
 def main():
-    with open("data3.json", "r") as f:
+    filename = input("Input file name:") or "data3.json"
+    with open(filename, "r") as f:
         data = json.load(f)
-    result = from_dict(data_class=Grammar, data=data)
+    g = from_dict(data_class=Grammar, data=data)
 
-    print(result)
-    result.print()
+    g.print()
 
     print("--------- Left Recursion Elimination -----------")
-    g = reduce_left_recursion(result)
+    g = reduce_left_recursion(g)
     g.print()
 
     print("--------- Chomsky Normal Form -----------")
