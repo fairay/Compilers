@@ -17,7 +17,7 @@ def eq_grammar(a: Grammar, b: Grammar):
 
 @pytest.mark.parametrize(
     'filename',
-    [("left_recursion1"), ("left_recursion2")]
+    ["left_recursion1", "left_recursion2"]
 )
 def test_left_recursion(filename):
     with open(f"test_data/src_{filename}.json", "r") as f:
@@ -33,7 +33,7 @@ def test_left_recursion(filename):
 
 @pytest.mark.parametrize(
     'filename',
-    [("chomsky1")]
+    ["chomsky1"]
 )
 def test_chomsky_normal_form(filename):
     with open(f"test_data/src_{filename}.json", "r") as f:
@@ -49,7 +49,7 @@ def test_chomsky_normal_form(filename):
 
 @pytest.mark.parametrize(
     'filename',
-    [("full1")]
+    ["full1"]
 )
 def test_full(filename):
     with open(f"test_data/src_{filename}.json", "r") as f:

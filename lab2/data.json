@@ -7,15 +7,15 @@
         {"name": "RPAREN", "spell": ")"}
     ],
     "non_term_symbols": [
-        {"name": "E"}, {"name": "T"}, {"name": "F"}
+        {"name": "S"}, {"name": "T"}, {"name": "F"}
     ],
     "productions": [
         {
-            "lhs": "E",
-            "rhs": ["E", "ADD", "T"]
+            "lhs": "S",
+            "rhs": ["S", "ADD", "T"]
         },
         {
-            "lhs": "E",
+            "lhs": "S",
             "rhs": ["T"]
         },
         {
@@ -32,8 +32,8 @@
         },
         {
             "lhs": "F",
-            "rhs": ["LPAREN", "E","RPAREN"]
+            "rhs": ["LPAREN", "S","RPAREN"]
         }
     ],
-    "start_symbol": {"name": "E"}
+    "start_symbol": {"name": "S"}
 }

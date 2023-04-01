@@ -1,5 +1,6 @@
 from copy import deepcopy
 from dataclasses import dataclass
+from typing import Union
 
 
 @dataclass(unsafe_hash=True)
@@ -35,8 +36,8 @@ class NonTermSymbol(Symbol):
 
 @dataclass
 class Production:
-    lhs: Symbol | str
-    rhs: list[Symbol] | list[str]
+    lhs: Union[Symbol, str]
+    rhs: Union[list[Symbol], list[str]]
 
     def to_str(self):
         return (self.lhs.name, " ".join(s.name for s in self.rhs))
@@ -107,8 +108,8 @@ class Grammar:
         for p in self.symbol_production(s):
             first_rhs = p.rhs[0]
             if (
-                first_rhs.type != "nonterm"
-                or self.non_term_symbols.index(first_rhs) >= idx
+                    first_rhs.type != "nonterm"
+                    or self.non_term_symbols.index(first_rhs) >= idx
             ):
                 new_prods.append(p)
                 continue
@@ -176,6 +177,7 @@ def find_eps_nonterms(g: Grammar) -> set[NonTermSymbol]:
             terms = new_terms
     return terms
 
+
 def chomsky_normal_form(old_g: Grammar) -> Grammar:
     g = deepcopy(old_g)
 
@@ -194,7 +196,7 @@ def chomsky_normal_form(old_g: Grammar) -> Grammar:
             rhs = p.rhs[0]
             rhs_plist = g.symbol_production(rhs)
             for rhs_p in rhs_plist:
-               g.add_production(lhs, rhs_p.rhs)
+                g.add_production(lhs, rhs_p.rhs)
             g.remove_production(p)
             index -= 1
         # A -> ??
@@ -206,8 +208,8 @@ def chomsky_normal_form(old_g: Grammar) -> Grammar:
                     p.rhs[i] = nt_s
         # A -> ?...?
         else:
-            for i in range(len(p.rhs)-2):
-                new_nt = g.get_compressed_nt(p.rhs[i+1:])
+            for i in range(len(p.rhs) - 2):
+                new_nt = g.get_compressed_nt(p.rhs[i + 1:])
                 g.add_production(lhs, [p.rhs[i], new_nt])
                 lhs = new_nt
             g.add_production(lhs, p.rhs[-2:])
