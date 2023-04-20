@@ -1,5 +1,5 @@
 import pytest
-from main import validate
+from main import validate, full_validate
 
 
 @pytest.mark.parametrize(
@@ -27,6 +27,20 @@ from main import validate
 )
 def test_parse(phrase, expected):
     assert validate(phrase) == expected
+
+
+@pytest.mark.parametrize(
+    'phrase, expected',
+    [
+        ("{}", False),
+        ("{i=C}", True),
+        ("{i=C;}", False),
+        ("{i=C;i=C<(i+i*Cor(notC))}", True),
+        ("{i=i;i=C=i}", True),
+    ]
+)
+def test_full_parse(phrase, expected):
+    assert full_validate(phrase) == expected
 
 
 if __name__ == '__main__':

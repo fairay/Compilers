@@ -46,12 +46,15 @@ class Parser:
 
     def run(self):
         try:
-            self.expr()
+            self.S()
         except InternalParserError:
             raise UnexpectedSymbolError(self.i)
 
         if self.i != len(self.s):
             raise NotYetError(self.s, self.i)
+        
+    def S(self):
+        self.expr()
 
     def expr(self):
         self.simple_expr()
@@ -125,6 +128,39 @@ class Parser:
     def constant(self):
         self.one_of_non_terms('C')
 
+class FullParser(Parser):
+    def __init__(self, s: str) -> None:
+        super().__init__(s)
+        self.first.update({
+            'tail': ';'
+        })
+
+    def S(self):
+        self.program()
+    
+    def program(self):
+        self.block()
+    
+    def block(self):
+        self.one_of_non_terms('{')
+        self.list_of_operators()
+        self.one_of_non_terms('}')
+    
+    def list_of_operators(self):
+        self.operator()
+        self.tail()
+
+    def tail(self):
+        if self.in_first('tail'):
+            self.one_of_non_terms(';')
+            self.operator()
+            self.tail()
+
+    def operator(self):
+        self.identifier()
+        self.one_of_non_terms('=')
+        self.expr()
+
 
 def validate(s: str):
     p = Parser(s)
@@ -135,6 +171,15 @@ def validate(s: str):
         return False
     return True
 
+
+def full_validate(s: str):
+    p = FullParser(s)
+    try:
+        p.run()
+    except ParserError as e:
+        print(f'parsing failed: {e}')
+        return False
+    return True
 
 def main():
     pass
