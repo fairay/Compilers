@@ -36,10 +36,10 @@ class Parser:
         self.s = s
 
     def in_first(self, func: str):
-        return self.i < len(self.s) and self.s[self.i] in self.first[func]
-
-    def is_next(self, symbol: str):
-        return self.i < len(self.s) and self.s[self.i] == symbol
+        return (
+            self.i < len(self.s) and
+            self.s[self.i] in self.first[func]
+        )
 
     def one_of_non_terms(self, *nt_list: str):
         for nt in nt_list:
