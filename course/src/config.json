@@ -1,0 +1,4 @@
+{
+    "source_path": "examples/example1.c",
+	"output_path": "build/output.ll"
+}
