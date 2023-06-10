@@ -10,9 +10,6 @@ type tinycListener interface {
 	// EnterPrimaryExpression is called when entering the primaryExpression production.
 	EnterPrimaryExpression(c *PrimaryExpressionContext)
 
-	// EnterGenericSelection is called when entering the genericSelection production.
-	EnterGenericSelection(c *GenericSelectionContext)
-
 	// EnterGenericAssocList is called when entering the genericAssocList production.
 	EnterGenericAssocList(c *GenericAssocListContext)
 
@@ -40,20 +37,11 @@ type tinycListener interface {
 	// EnterAdditiveExpression is called when entering the additiveExpression production.
 	EnterAdditiveExpression(c *AdditiveExpressionContext)
 
-	// EnterShiftExpression is called when entering the shiftExpression production.
-	EnterShiftExpression(c *ShiftExpressionContext)
-
 	// EnterRelationalExpression is called when entering the relationalExpression production.
 	EnterRelationalExpression(c *RelationalExpressionContext)
 
 	// EnterEqualityExpression is called when entering the equalityExpression production.
 	EnterEqualityExpression(c *EqualityExpressionContext)
-
-	// EnterAndExpression is called when entering the andExpression production.
-	EnterAndExpression(c *AndExpressionContext)
-
-	// EnterExclusiveOrExpression is called when entering the exclusiveOrExpression production.
-	EnterExclusiveOrExpression(c *ExclusiveOrExpressionContext)
 
 	// EnterInclusiveOrExpression is called when entering the inclusiveOrExpression production.
 	EnterInclusiveOrExpression(c *InclusiveOrExpressionContext)
@@ -63,9 +51,6 @@ type tinycListener interface {
 
 	// EnterLogicalOrExpression is called when entering the logicalOrExpression production.
 	EnterLogicalOrExpression(c *LogicalOrExpressionContext)
-
-	// EnterConditionalExpression is called when entering the conditionalExpression production.
-	EnterConditionalExpression(c *ConditionalExpressionContext)
 
 	// EnterAssignmentExpression is called when entering the assignmentExpression production.
 	EnterAssignmentExpression(c *AssignmentExpressionContext)
@@ -97,9 +82,6 @@ type tinycListener interface {
 	// EnterInitDeclarator is called when entering the initDeclarator production.
 	EnterInitDeclarator(c *InitDeclaratorContext)
 
-	// EnterStorageClassSpecifier is called when entering the storageClassSpecifier production.
-	EnterStorageClassSpecifier(c *StorageClassSpecifierContext)
-
 	// EnterTypeSpecifier is called when entering the typeSpecifier production.
 	EnterTypeSpecifier(c *TypeSpecifierContext)
 
@@ -124,47 +106,11 @@ type tinycListener interface {
 	// EnterStructDeclarator is called when entering the structDeclarator production.
 	EnterStructDeclarator(c *StructDeclaratorContext)
 
-	// EnterEnumSpecifier is called when entering the enumSpecifier production.
-	EnterEnumSpecifier(c *EnumSpecifierContext)
-
-	// EnterEnumeratorList is called when entering the enumeratorList production.
-	EnterEnumeratorList(c *EnumeratorListContext)
-
-	// EnterEnumerator is called when entering the enumerator production.
-	EnterEnumerator(c *EnumeratorContext)
-
-	// EnterEnumerationConstant is called when entering the enumerationConstant production.
-	EnterEnumerationConstant(c *EnumerationConstantContext)
-
-	// EnterAtomicTypeSpecifier is called when entering the atomicTypeSpecifier production.
-	EnterAtomicTypeSpecifier(c *AtomicTypeSpecifierContext)
-
-	// EnterTypeQualifier is called when entering the typeQualifier production.
-	EnterTypeQualifier(c *TypeQualifierContext)
-
-	// EnterFunctionSpecifier is called when entering the functionSpecifier production.
-	EnterFunctionSpecifier(c *FunctionSpecifierContext)
-
-	// EnterAlignmentSpecifier is called when entering the alignmentSpecifier production.
-	EnterAlignmentSpecifier(c *AlignmentSpecifierContext)
-
 	// EnterDeclarator is called when entering the declarator production.
 	EnterDeclarator(c *DeclaratorContext)
 
 	// EnterDirectDeclarator is called when entering the directDeclarator production.
 	EnterDirectDeclarator(c *DirectDeclaratorContext)
-
-	// EnterVcSpecificModifer is called when entering the vcSpecificModifer production.
-	EnterVcSpecificModifer(c *VcSpecificModiferContext)
-
-	// EnterGccDeclaratorExtension is called when entering the gccDeclaratorExtension production.
-	EnterGccDeclaratorExtension(c *GccDeclaratorExtensionContext)
-
-	// EnterGccAttributeSpecifier is called when entering the gccAttributeSpecifier production.
-	EnterGccAttributeSpecifier(c *GccAttributeSpecifierContext)
-
-	// EnterGccAttributeList is called when entering the gccAttributeList production.
-	EnterGccAttributeList(c *GccAttributeListContext)
 
 	// EnterGccAttribute is called when entering the gccAttribute production.
 	EnterGccAttribute(c *GccAttributeContext)
@@ -174,9 +120,6 @@ type tinycListener interface {
 
 	// EnterPointer is called when entering the pointer production.
 	EnterPointer(c *PointerContext)
-
-	// EnterTypeQualifierList is called when entering the typeQualifierList production.
-	EnterTypeQualifierList(c *TypeQualifierListContext)
 
 	// EnterParameterTypeList is called when entering the parameterTypeList production.
 	EnterParameterTypeList(c *ParameterTypeListContext)
@@ -217,9 +160,6 @@ type tinycListener interface {
 	// EnterDesignator is called when entering the designator production.
 	EnterDesignator(c *DesignatorContext)
 
-	// EnterStaticAssertDeclaration is called when entering the staticAssertDeclaration production.
-	EnterStaticAssertDeclaration(c *StaticAssertDeclarationContext)
-
 	// EnterStatement is called when entering the statement production.
 	EnterStatement(c *StatementContext)
 
@@ -259,9 +199,6 @@ type tinycListener interface {
 	// EnterCompilationUnit is called when entering the compilationUnit production.
 	EnterCompilationUnit(c *CompilationUnitContext)
 
-	// EnterTranslationUnit is called when entering the translationUnit production.
-	EnterTranslationUnit(c *TranslationUnitContext)
-
 	// EnterExternalDeclaration is called when entering the externalDeclaration production.
 	EnterExternalDeclaration(c *ExternalDeclarationContext)
 
@@ -273,9 +210,6 @@ type tinycListener interface {
 
 	// ExitPrimaryExpression is called when exiting the primaryExpression production.
 	ExitPrimaryExpression(c *PrimaryExpressionContext)
-
-	// ExitGenericSelection is called when exiting the genericSelection production.
-	ExitGenericSelection(c *GenericSelectionContext)
 
 	// ExitGenericAssocList is called when exiting the genericAssocList production.
 	ExitGenericAssocList(c *GenericAssocListContext)
@@ -304,20 +238,11 @@ type tinycListener interface {
 	// ExitAdditiveExpression is called when exiting the additiveExpression production.
 	ExitAdditiveExpression(c *AdditiveExpressionContext)
 
-	// ExitShiftExpression is called when exiting the shiftExpression production.
-	ExitShiftExpression(c *ShiftExpressionContext)
-
 	// ExitRelationalExpression is called when exiting the relationalExpression production.
 	ExitRelationalExpression(c *RelationalExpressionContext)
 
 	// ExitEqualityExpression is called when exiting the equalityExpression production.
 	ExitEqualityExpression(c *EqualityExpressionContext)
-
-	// ExitAndExpression is called when exiting the andExpression production.
-	ExitAndExpression(c *AndExpressionContext)
-
-	// ExitExclusiveOrExpression is called when exiting the exclusiveOrExpression production.
-	ExitExclusiveOrExpression(c *ExclusiveOrExpressionContext)
 
 	// ExitInclusiveOrExpression is called when exiting the inclusiveOrExpression production.
 	ExitInclusiveOrExpression(c *InclusiveOrExpressionContext)
@@ -327,9 +252,6 @@ type tinycListener interface {
 
 	// ExitLogicalOrExpression is called when exiting the logicalOrExpression production.
 	ExitLogicalOrExpression(c *LogicalOrExpressionContext)
-
-	// ExitConditionalExpression is called when exiting the conditionalExpression production.
-	ExitConditionalExpression(c *ConditionalExpressionContext)
 
 	// ExitAssignmentExpression is called when exiting the assignmentExpression production.
 	ExitAssignmentExpression(c *AssignmentExpressionContext)
@@ -361,9 +283,6 @@ type tinycListener interface {
 	// ExitInitDeclarator is called when exiting the initDeclarator production.
 	ExitInitDeclarator(c *InitDeclaratorContext)
 
-	// ExitStorageClassSpecifier is called when exiting the storageClassSpecifier production.
-	ExitStorageClassSpecifier(c *StorageClassSpecifierContext)
-
 	// ExitTypeSpecifier is called when exiting the typeSpecifier production.
 	ExitTypeSpecifier(c *TypeSpecifierContext)
 
@@ -388,47 +307,11 @@ type tinycListener interface {
 	// ExitStructDeclarator is called when exiting the structDeclarator production.
 	ExitStructDeclarator(c *StructDeclaratorContext)
 
-	// ExitEnumSpecifier is called when exiting the enumSpecifier production.
-	ExitEnumSpecifier(c *EnumSpecifierContext)
-
-	// ExitEnumeratorList is called when exiting the enumeratorList production.
-	ExitEnumeratorList(c *EnumeratorListContext)
-
-	// ExitEnumerator is called when exiting the enumerator production.
-	ExitEnumerator(c *EnumeratorContext)
-
-	// ExitEnumerationConstant is called when exiting the enumerationConstant production.
-	ExitEnumerationConstant(c *EnumerationConstantContext)
-
-	// ExitAtomicTypeSpecifier is called when exiting the atomicTypeSpecifier production.
-	ExitAtomicTypeSpecifier(c *AtomicTypeSpecifierContext)
-
-	// ExitTypeQualifier is called when exiting the typeQualifier production.
-	ExitTypeQualifier(c *TypeQualifierContext)
-
-	// ExitFunctionSpecifier is called when exiting the functionSpecifier production.
-	ExitFunctionSpecifier(c *FunctionSpecifierContext)
-
-	// ExitAlignmentSpecifier is called when exiting the alignmentSpecifier production.
-	ExitAlignmentSpecifier(c *AlignmentSpecifierContext)
-
 	// ExitDeclarator is called when exiting the declarator production.
 	ExitDeclarator(c *DeclaratorContext)
 
 	// ExitDirectDeclarator is called when exiting the directDeclarator production.
 	ExitDirectDeclarator(c *DirectDeclaratorContext)
-
-	// ExitVcSpecificModifer is called when exiting the vcSpecificModifer production.
-	ExitVcSpecificModifer(c *VcSpecificModiferContext)
-
-	// ExitGccDeclaratorExtension is called when exiting the gccDeclaratorExtension production.
-	ExitGccDeclaratorExtension(c *GccDeclaratorExtensionContext)
-
-	// ExitGccAttributeSpecifier is called when exiting the gccAttributeSpecifier production.
-	ExitGccAttributeSpecifier(c *GccAttributeSpecifierContext)
-
-	// ExitGccAttributeList is called when exiting the gccAttributeList production.
-	ExitGccAttributeList(c *GccAttributeListContext)
 
 	// ExitGccAttribute is called when exiting the gccAttribute production.
 	ExitGccAttribute(c *GccAttributeContext)
@@ -438,9 +321,6 @@ type tinycListener interface {
 
 	// ExitPointer is called when exiting the pointer production.
 	ExitPointer(c *PointerContext)
-
-	// ExitTypeQualifierList is called when exiting the typeQualifierList production.
-	ExitTypeQualifierList(c *TypeQualifierListContext)
 
 	// ExitParameterTypeList is called when exiting the parameterTypeList production.
 	ExitParameterTypeList(c *ParameterTypeListContext)
@@ -481,9 +361,6 @@ type tinycListener interface {
 	// ExitDesignator is called when exiting the designator production.
 	ExitDesignator(c *DesignatorContext)
 
-	// ExitStaticAssertDeclaration is called when exiting the staticAssertDeclaration production.
-	ExitStaticAssertDeclaration(c *StaticAssertDeclarationContext)
-
 	// ExitStatement is called when exiting the statement production.
 	ExitStatement(c *StatementContext)
 
@@ -522,9 +399,6 @@ type tinycListener interface {
 
 	// ExitCompilationUnit is called when exiting the compilationUnit production.
 	ExitCompilationUnit(c *CompilationUnitContext)
-
-	// ExitTranslationUnit is called when exiting the translationUnit production.
-	ExitTranslationUnit(c *TranslationUnitContext)
 
 	// ExitExternalDeclaration is called when exiting the externalDeclaration production.
 	ExitExternalDeclaration(c *ExternalDeclarationContext)

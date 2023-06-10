@@ -10,9 +10,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#primaryExpression.
 	VisitPrimaryExpression(ctx *PrimaryExpressionContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#genericSelection.
-	VisitGenericSelection(ctx *GenericSelectionContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#genericAssocList.
 	VisitGenericAssocList(ctx *GenericAssocListContext) interface{}
 
@@ -40,20 +37,11 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#additiveExpression.
 	VisitAdditiveExpression(ctx *AdditiveExpressionContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#shiftExpression.
-	VisitShiftExpression(ctx *ShiftExpressionContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#relationalExpression.
 	VisitRelationalExpression(ctx *RelationalExpressionContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#equalityExpression.
 	VisitEqualityExpression(ctx *EqualityExpressionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#andExpression.
-	VisitAndExpression(ctx *AndExpressionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#exclusiveOrExpression.
-	VisitExclusiveOrExpression(ctx *ExclusiveOrExpressionContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#inclusiveOrExpression.
 	VisitInclusiveOrExpression(ctx *InclusiveOrExpressionContext) interface{}
@@ -63,9 +51,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#logicalOrExpression.
 	VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#conditionalExpression.
-	VisitConditionalExpression(ctx *ConditionalExpressionContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#assignmentExpression.
 	VisitAssignmentExpression(ctx *AssignmentExpressionContext) interface{}
@@ -97,9 +82,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#initDeclarator.
 	VisitInitDeclarator(ctx *InitDeclaratorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#storageClassSpecifier.
-	VisitStorageClassSpecifier(ctx *StorageClassSpecifierContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#typeSpecifier.
 	VisitTypeSpecifier(ctx *TypeSpecifierContext) interface{}
 
@@ -124,47 +106,11 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#structDeclarator.
 	VisitStructDeclarator(ctx *StructDeclaratorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#enumSpecifier.
-	VisitEnumSpecifier(ctx *EnumSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#enumeratorList.
-	VisitEnumeratorList(ctx *EnumeratorListContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#enumerator.
-	VisitEnumerator(ctx *EnumeratorContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#enumerationConstant.
-	VisitEnumerationConstant(ctx *EnumerationConstantContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#atomicTypeSpecifier.
-	VisitAtomicTypeSpecifier(ctx *AtomicTypeSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#typeQualifier.
-	VisitTypeQualifier(ctx *TypeQualifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#functionSpecifier.
-	VisitFunctionSpecifier(ctx *FunctionSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#alignmentSpecifier.
-	VisitAlignmentSpecifier(ctx *AlignmentSpecifierContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#declarator.
 	VisitDeclarator(ctx *DeclaratorContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#directDeclarator.
 	VisitDirectDeclarator(ctx *DirectDeclaratorContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#vcSpecificModifer.
-	VisitVcSpecificModifer(ctx *VcSpecificModiferContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#gccDeclaratorExtension.
-	VisitGccDeclaratorExtension(ctx *GccDeclaratorExtensionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#gccAttributeSpecifier.
-	VisitGccAttributeSpecifier(ctx *GccAttributeSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#gccAttributeList.
-	VisitGccAttributeList(ctx *GccAttributeListContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#gccAttribute.
 	VisitGccAttribute(ctx *GccAttributeContext) interface{}
@@ -174,9 +120,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#pointer.
 	VisitPointer(ctx *PointerContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#typeQualifierList.
-	VisitTypeQualifierList(ctx *TypeQualifierListContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#parameterTypeList.
 	VisitParameterTypeList(ctx *ParameterTypeListContext) interface{}
@@ -217,9 +160,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#designator.
 	VisitDesignator(ctx *DesignatorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#staticAssertDeclaration.
-	VisitStaticAssertDeclaration(ctx *StaticAssertDeclarationContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#statement.
 	VisitStatement(ctx *StatementContext) interface{}
 
@@ -258,9 +198,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#compilationUnit.
 	VisitCompilationUnit(ctx *CompilationUnitContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#translationUnit.
-	VisitTranslationUnit(ctx *TranslationUnitContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#externalDeclaration.
 	VisitExternalDeclaration(ctx *ExternalDeclarationContext) interface{}

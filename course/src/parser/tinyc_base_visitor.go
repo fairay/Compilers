@@ -11,10 +11,6 @@ func (v *BasetinycVisitor) VisitPrimaryExpression(ctx *PrimaryExpressionContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitGenericSelection(ctx *GenericSelectionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitGenericAssocList(ctx *GenericAssocListContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -51,23 +47,11 @@ func (v *BasetinycVisitor) VisitAdditiveExpression(ctx *AdditiveExpressionContex
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitShiftExpression(ctx *ShiftExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitRelationalExpression(ctx *RelationalExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BasetinycVisitor) VisitEqualityExpression(ctx *EqualityExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitAndExpression(ctx *AndExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitExclusiveOrExpression(ctx *ExclusiveOrExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -80,10 +64,6 @@ func (v *BasetinycVisitor) VisitLogicalAndExpression(ctx *LogicalAndExpressionCo
 }
 
 func (v *BasetinycVisitor) VisitLogicalOrExpression(ctx *LogicalOrExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitConditionalExpression(ctx *ConditionalExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -127,10 +107,6 @@ func (v *BasetinycVisitor) VisitInitDeclarator(ctx *InitDeclaratorContext) inter
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitStorageClassSpecifier(ctx *StorageClassSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitTypeSpecifier(ctx *TypeSpecifierContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -163,59 +139,11 @@ func (v *BasetinycVisitor) VisitStructDeclarator(ctx *StructDeclaratorContext) i
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitEnumSpecifier(ctx *EnumSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitEnumeratorList(ctx *EnumeratorListContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitEnumerator(ctx *EnumeratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitEnumerationConstant(ctx *EnumerationConstantContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitAtomicTypeSpecifier(ctx *AtomicTypeSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitTypeQualifier(ctx *TypeQualifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitFunctionSpecifier(ctx *FunctionSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitAlignmentSpecifier(ctx *AlignmentSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitDeclarator(ctx *DeclaratorContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BasetinycVisitor) VisitDirectDeclarator(ctx *DirectDeclaratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitVcSpecificModifer(ctx *VcSpecificModiferContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitGccDeclaratorExtension(ctx *GccDeclaratorExtensionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitGccAttributeSpecifier(ctx *GccAttributeSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitGccAttributeList(ctx *GccAttributeListContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -228,10 +156,6 @@ func (v *BasetinycVisitor) VisitNestedParenthesesBlock(ctx *NestedParenthesesBlo
 }
 
 func (v *BasetinycVisitor) VisitPointer(ctx *PointerContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitTypeQualifierList(ctx *TypeQualifierListContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -287,10 +211,6 @@ func (v *BasetinycVisitor) VisitDesignator(ctx *DesignatorContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitStaticAssertDeclaration(ctx *StaticAssertDeclarationContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitStatement(ctx *StatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -340,10 +260,6 @@ func (v *BasetinycVisitor) VisitJumpStatement(ctx *JumpStatementContext) interfa
 }
 
 func (v *BasetinycVisitor) VisitCompilationUnit(ctx *CompilationUnitContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitTranslationUnit(ctx *TranslationUnitContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

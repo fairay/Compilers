@@ -1,8 +1,8 @@
 package ast
 
 import (
-	bp "course/compilers/parser"		// baseparser
-	"fmt"
+	bp "course/compilers/parser" // baseparser
+	"log"
 
 	"github.com/llir/llvm/ir"
 	"github.com/llir/llvm/ir/types"
@@ -20,7 +20,7 @@ func NewVisitor() *Visitor {
 }
 
 func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
-	fmt.Printf("VisitCompilationUnit\n")
+	log.Printf("VisitCompilationUnit\n")
 	v.Module = ir.NewModule()
 	main := v.Module.NewFunc("main", types.I32)
 	v.curBlock = main.NewBlock("")
