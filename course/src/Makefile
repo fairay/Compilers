@@ -1,4 +1,4 @@
-all: generate output.exe
+all: output.exe
 
 buildDir = build
 

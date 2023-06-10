@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"course/compilers/parser"
+	bp "course/compilers/parser"		// baseparser
 	"fmt"
 
 	"github.com/llir/llvm/ir"
@@ -9,7 +9,7 @@ import (
 )
 
 type Visitor struct {
-	parser.BasetinycVisitor
+	bp.BasetinycVisitor
 
 	Module *ir.Module
 	curBlock *ir.Block
@@ -19,25 +19,14 @@ func NewVisitor() *Visitor {
 	return &Visitor{}
 }
 
-func (v *Visitor) VisitProgram(ctx *parser.ProgramContext) interface{} {
-	fmt.Printf("VisitProgram\n")
+func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
+	fmt.Printf("VisitCompilationUnit\n")
 	v.Module = ir.NewModule()
 	main := v.Module.NewFunc("main", types.I32)
 	v.curBlock = main.NewBlock("")
 
-	for _, spec := range ctx.AllStatement() {
-		v.VisitStatement(spec.(*parser.StatementContext))
-	}
-
-	return v.VisitChildren(ctx)
-}
-
-func (v *Visitor) VisitStatement(ctx *parser.StatementContext) interface {} {
-	fmt.Printf("VisitStatement: %s\n", ctx.GetText())
+	// for _, spec := range ctx.GetChildren() {
+	// 	v.VisitStatement(spec.(*bp.Ext))
+	// }
 	return nil
-}
-
-func (v *Visitor) VisitInteger(ctx *parser.IntegerContext) interface{} {
-	fmt.Printf("Visiting integer: %d\n", 0)
-	return v.VisitChildren(ctx)
 }

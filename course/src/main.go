@@ -2,10 +2,9 @@ package main
 
 import (
 	"course/compilers/ast"
-	"course/compilers/parser"
+	baseparser "course/compilers/parser"
 	"course/compilers/utils"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -16,8 +15,11 @@ import (
 	"github.com/llir/llvm/ir/types"
 )
 
+// little trick to define parser type
+var parser = baseparser.NewtinycParser(nil);
+
 type TreeShapeListener struct {
-	*parser.BasetinycListener
+	*baseparser.BasetinycListener
 }
 
 func NewTreeShapeListener() *TreeShapeListener {
@@ -25,11 +27,8 @@ func NewTreeShapeListener() *TreeShapeListener {
 }
 
 func (listener *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
-	fmt.Printf("[%d]\t %s\n", ctx.GetRuleIndex(), ctx.GetText())
-}
-
-func (listener *TreeShapeListener) EnterInteger(ctx *parser.IntegerContext) {
-	fmt.Println("INT: ", ctx.GetText())
+    name := parser.RuleNames[ctx.GetRuleIndex()]
+	log.Printf("[%30s] %s\n", name, ctx.GetText())
 }
 
 func main() {
@@ -43,7 +42,7 @@ func main() {
 }
 
 func dumpModule(module *ir.Module) {
-	err := ioutil.WriteFile(
+	err := os.WriteFile(
         utils.Config().OutputPath,
         []byte(module.String()),
         0644,
@@ -55,17 +54,17 @@ func dumpModule(module *ir.Module) {
 
 func walkTree(fileName string) {
 	input, _ := antlr.NewFileStream(fileName)
-	lexer := parser.NewtinycLexer(input)
+	lexer := baseparser.NewtinycLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.LexerDefaultTokenChannel)
-	tinycParser := parser.NewtinycParser(stream)
+	parser = baseparser.NewtinycParser(stream)
 
-	tinycParser.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	tinycParser.BuildParseTrees = true
-	tree := tinycParser.Program()
-	// antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
+	parser.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	parser.BuildParseTrees = true
+	tree := parser.CompilationUnit()
+	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
 
 	visitor := ast.NewVisitor()
-	visitor.VisitProgram(tree.(*parser.ProgramContext))
+	visitor.VisitCompilationUnit(tree.(*baseparser.CompilationUnitContext))
 }
 
 
