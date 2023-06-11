@@ -50,18 +50,6 @@ func (s *BasetinycListener) EnterArgumentExpressionList(ctx *ArgumentExpressionL
 // ExitArgumentExpressionList is called when production argumentExpressionList is exited.
 func (s *BasetinycListener) ExitArgumentExpressionList(ctx *ArgumentExpressionListContext) {}
 
-// EnterUnaryExpression is called when production unaryExpression is entered.
-func (s *BasetinycListener) EnterUnaryExpression(ctx *UnaryExpressionContext) {}
-
-// ExitUnaryExpression is called when production unaryExpression is exited.
-func (s *BasetinycListener) ExitUnaryExpression(ctx *UnaryExpressionContext) {}
-
-// EnterUnaryOperator is called when production unaryOperator is entered.
-func (s *BasetinycListener) EnterUnaryOperator(ctx *UnaryOperatorContext) {}
-
-// ExitUnaryOperator is called when production unaryOperator is exited.
-func (s *BasetinycListener) ExitUnaryOperator(ctx *UnaryOperatorContext) {}
-
 // EnterCastExpression is called when production castExpression is entered.
 func (s *BasetinycListener) EnterCastExpression(ctx *CastExpressionContext) {}
 
@@ -92,12 +80,6 @@ func (s *BasetinycListener) EnterEqualityExpression(ctx *EqualityExpressionConte
 // ExitEqualityExpression is called when production equalityExpression is exited.
 func (s *BasetinycListener) ExitEqualityExpression(ctx *EqualityExpressionContext) {}
 
-// EnterInclusiveOrExpression is called when production inclusiveOrExpression is entered.
-func (s *BasetinycListener) EnterInclusiveOrExpression(ctx *InclusiveOrExpressionContext) {}
-
-// ExitInclusiveOrExpression is called when production inclusiveOrExpression is exited.
-func (s *BasetinycListener) ExitInclusiveOrExpression(ctx *InclusiveOrExpressionContext) {}
-
 // EnterLogicalAndExpression is called when production logicalAndExpression is entered.
 func (s *BasetinycListener) EnterLogicalAndExpression(ctx *LogicalAndExpressionContext) {}
 
@@ -127,12 +109,6 @@ func (s *BasetinycListener) EnterExpression(ctx *ExpressionContext) {}
 
 // ExitExpression is called when production expression is exited.
 func (s *BasetinycListener) ExitExpression(ctx *ExpressionContext) {}
-
-// EnterConstantExpression is called when production constantExpression is entered.
-func (s *BasetinycListener) EnterConstantExpression(ctx *ConstantExpressionContext) {}
-
-// ExitConstantExpression is called when production constantExpression is exited.
-func (s *BasetinycListener) ExitConstantExpression(ctx *ConstantExpressionContext) {}
 
 // EnterDeclaration is called when production declaration is entered.
 func (s *BasetinycListener) EnterDeclaration(ctx *DeclarationContext) {}
@@ -266,12 +242,6 @@ func (s *BasetinycListener) EnterAbstractDeclarator(ctx *AbstractDeclaratorConte
 // ExitAbstractDeclarator is called when production abstractDeclarator is exited.
 func (s *BasetinycListener) ExitAbstractDeclarator(ctx *AbstractDeclaratorContext) {}
 
-// EnterDirectAbstractDeclarator is called when production directAbstractDeclarator is entered.
-func (s *BasetinycListener) EnterDirectAbstractDeclarator(ctx *DirectAbstractDeclaratorContext) {}
-
-// ExitDirectAbstractDeclarator is called when production directAbstractDeclarator is exited.
-func (s *BasetinycListener) ExitDirectAbstractDeclarator(ctx *DirectAbstractDeclaratorContext) {}
-
 // EnterTypedefName is called when production typedefName is entered.
 func (s *BasetinycListener) EnterTypedefName(ctx *TypedefNameContext) {}
 
@@ -326,12 +296,6 @@ func (s *BasetinycListener) EnterCompoundStatement(ctx *CompoundStatementContext
 // ExitCompoundStatement is called when production compoundStatement is exited.
 func (s *BasetinycListener) ExitCompoundStatement(ctx *CompoundStatementContext) {}
 
-// EnterBlockItemList is called when production blockItemList is entered.
-func (s *BasetinycListener) EnterBlockItemList(ctx *BlockItemListContext) {}
-
-// ExitBlockItemList is called when production blockItemList is exited.
-func (s *BasetinycListener) ExitBlockItemList(ctx *BlockItemListContext) {}
-
 // EnterBlockItem is called when production blockItem is entered.
 func (s *BasetinycListener) EnterBlockItem(ctx *BlockItemContext) {}
 
@@ -355,24 +319,6 @@ func (s *BasetinycListener) EnterIterationStatement(ctx *IterationStatementConte
 
 // ExitIterationStatement is called when production iterationStatement is exited.
 func (s *BasetinycListener) ExitIterationStatement(ctx *IterationStatementContext) {}
-
-// EnterForCondition is called when production forCondition is entered.
-func (s *BasetinycListener) EnterForCondition(ctx *ForConditionContext) {}
-
-// ExitForCondition is called when production forCondition is exited.
-func (s *BasetinycListener) ExitForCondition(ctx *ForConditionContext) {}
-
-// EnterForDeclaration is called when production forDeclaration is entered.
-func (s *BasetinycListener) EnterForDeclaration(ctx *ForDeclarationContext) {}
-
-// ExitForDeclaration is called when production forDeclaration is exited.
-func (s *BasetinycListener) ExitForDeclaration(ctx *ForDeclarationContext) {}
-
-// EnterForExpression is called when production forExpression is entered.
-func (s *BasetinycListener) EnterForExpression(ctx *ForExpressionContext) {}
-
-// ExitForExpression is called when production forExpression is exited.
-func (s *BasetinycListener) ExitForExpression(ctx *ForExpressionContext) {}
 
 // EnterJumpStatement is called when production jumpStatement is entered.
 func (s *BasetinycListener) EnterJumpStatement(ctx *JumpStatementContext) {}

@@ -22,12 +22,6 @@ type tinycListener interface {
 	// EnterArgumentExpressionList is called when entering the argumentExpressionList production.
 	EnterArgumentExpressionList(c *ArgumentExpressionListContext)
 
-	// EnterUnaryExpression is called when entering the unaryExpression production.
-	EnterUnaryExpression(c *UnaryExpressionContext)
-
-	// EnterUnaryOperator is called when entering the unaryOperator production.
-	EnterUnaryOperator(c *UnaryOperatorContext)
-
 	// EnterCastExpression is called when entering the castExpression production.
 	EnterCastExpression(c *CastExpressionContext)
 
@@ -43,9 +37,6 @@ type tinycListener interface {
 	// EnterEqualityExpression is called when entering the equalityExpression production.
 	EnterEqualityExpression(c *EqualityExpressionContext)
 
-	// EnterInclusiveOrExpression is called when entering the inclusiveOrExpression production.
-	EnterInclusiveOrExpression(c *InclusiveOrExpressionContext)
-
 	// EnterLogicalAndExpression is called when entering the logicalAndExpression production.
 	EnterLogicalAndExpression(c *LogicalAndExpressionContext)
 
@@ -60,9 +51,6 @@ type tinycListener interface {
 
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
-
-	// EnterConstantExpression is called when entering the constantExpression production.
-	EnterConstantExpression(c *ConstantExpressionContext)
 
 	// EnterDeclaration is called when entering the declaration production.
 	EnterDeclaration(c *DeclarationContext)
@@ -130,9 +118,6 @@ type tinycListener interface {
 	// EnterAbstractDeclarator is called when entering the abstractDeclarator production.
 	EnterAbstractDeclarator(c *AbstractDeclaratorContext)
 
-	// EnterDirectAbstractDeclarator is called when entering the directAbstractDeclarator production.
-	EnterDirectAbstractDeclarator(c *DirectAbstractDeclaratorContext)
-
 	// EnterTypedefName is called when entering the typedefName production.
 	EnterTypedefName(c *TypedefNameContext)
 
@@ -160,9 +145,6 @@ type tinycListener interface {
 	// EnterCompoundStatement is called when entering the compoundStatement production.
 	EnterCompoundStatement(c *CompoundStatementContext)
 
-	// EnterBlockItemList is called when entering the blockItemList production.
-	EnterBlockItemList(c *BlockItemListContext)
-
 	// EnterBlockItem is called when entering the blockItem production.
 	EnterBlockItem(c *BlockItemContext)
 
@@ -174,15 +156,6 @@ type tinycListener interface {
 
 	// EnterIterationStatement is called when entering the iterationStatement production.
 	EnterIterationStatement(c *IterationStatementContext)
-
-	// EnterForCondition is called when entering the forCondition production.
-	EnterForCondition(c *ForConditionContext)
-
-	// EnterForDeclaration is called when entering the forDeclaration production.
-	EnterForDeclaration(c *ForDeclarationContext)
-
-	// EnterForExpression is called when entering the forExpression production.
-	EnterForExpression(c *ForExpressionContext)
 
 	// EnterJumpStatement is called when entering the jumpStatement production.
 	EnterJumpStatement(c *JumpStatementContext)
@@ -214,12 +187,6 @@ type tinycListener interface {
 	// ExitArgumentExpressionList is called when exiting the argumentExpressionList production.
 	ExitArgumentExpressionList(c *ArgumentExpressionListContext)
 
-	// ExitUnaryExpression is called when exiting the unaryExpression production.
-	ExitUnaryExpression(c *UnaryExpressionContext)
-
-	// ExitUnaryOperator is called when exiting the unaryOperator production.
-	ExitUnaryOperator(c *UnaryOperatorContext)
-
 	// ExitCastExpression is called when exiting the castExpression production.
 	ExitCastExpression(c *CastExpressionContext)
 
@@ -235,9 +202,6 @@ type tinycListener interface {
 	// ExitEqualityExpression is called when exiting the equalityExpression production.
 	ExitEqualityExpression(c *EqualityExpressionContext)
 
-	// ExitInclusiveOrExpression is called when exiting the inclusiveOrExpression production.
-	ExitInclusiveOrExpression(c *InclusiveOrExpressionContext)
-
 	// ExitLogicalAndExpression is called when exiting the logicalAndExpression production.
 	ExitLogicalAndExpression(c *LogicalAndExpressionContext)
 
@@ -252,9 +216,6 @@ type tinycListener interface {
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
-
-	// ExitConstantExpression is called when exiting the constantExpression production.
-	ExitConstantExpression(c *ConstantExpressionContext)
 
 	// ExitDeclaration is called when exiting the declaration production.
 	ExitDeclaration(c *DeclarationContext)
@@ -322,9 +283,6 @@ type tinycListener interface {
 	// ExitAbstractDeclarator is called when exiting the abstractDeclarator production.
 	ExitAbstractDeclarator(c *AbstractDeclaratorContext)
 
-	// ExitDirectAbstractDeclarator is called when exiting the directAbstractDeclarator production.
-	ExitDirectAbstractDeclarator(c *DirectAbstractDeclaratorContext)
-
 	// ExitTypedefName is called when exiting the typedefName production.
 	ExitTypedefName(c *TypedefNameContext)
 
@@ -352,9 +310,6 @@ type tinycListener interface {
 	// ExitCompoundStatement is called when exiting the compoundStatement production.
 	ExitCompoundStatement(c *CompoundStatementContext)
 
-	// ExitBlockItemList is called when exiting the blockItemList production.
-	ExitBlockItemList(c *BlockItemListContext)
-
 	// ExitBlockItem is called when exiting the blockItem production.
 	ExitBlockItem(c *BlockItemContext)
 
@@ -366,15 +321,6 @@ type tinycListener interface {
 
 	// ExitIterationStatement is called when exiting the iterationStatement production.
 	ExitIterationStatement(c *IterationStatementContext)
-
-	// ExitForCondition is called when exiting the forCondition production.
-	ExitForCondition(c *ForConditionContext)
-
-	// ExitForDeclaration is called when exiting the forDeclaration production.
-	ExitForDeclaration(c *ForDeclarationContext)
-
-	// ExitForExpression is called when exiting the forExpression production.
-	ExitForExpression(c *ForExpressionContext)
 
 	// ExitJumpStatement is called when exiting the jumpStatement production.
 	ExitJumpStatement(c *JumpStatementContext)

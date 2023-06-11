@@ -22,12 +22,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#argumentExpressionList.
 	VisitArgumentExpressionList(ctx *ArgumentExpressionListContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#unaryExpression.
-	VisitUnaryExpression(ctx *UnaryExpressionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#unaryOperator.
-	VisitUnaryOperator(ctx *UnaryOperatorContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#castExpression.
 	VisitCastExpression(ctx *CastExpressionContext) interface{}
 
@@ -43,9 +37,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#equalityExpression.
 	VisitEqualityExpression(ctx *EqualityExpressionContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#inclusiveOrExpression.
-	VisitInclusiveOrExpression(ctx *InclusiveOrExpressionContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#logicalAndExpression.
 	VisitLogicalAndExpression(ctx *LogicalAndExpressionContext) interface{}
 
@@ -60,9 +51,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#expression.
 	VisitExpression(ctx *ExpressionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#constantExpression.
-	VisitConstantExpression(ctx *ConstantExpressionContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#declaration.
 	VisitDeclaration(ctx *DeclarationContext) interface{}
@@ -130,9 +118,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#abstractDeclarator.
 	VisitAbstractDeclarator(ctx *AbstractDeclaratorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#directAbstractDeclarator.
-	VisitDirectAbstractDeclarator(ctx *DirectAbstractDeclaratorContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#typedefName.
 	VisitTypedefName(ctx *TypedefNameContext) interface{}
 
@@ -160,9 +145,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#compoundStatement.
 	VisitCompoundStatement(ctx *CompoundStatementContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#blockItemList.
-	VisitBlockItemList(ctx *BlockItemListContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#blockItem.
 	VisitBlockItem(ctx *BlockItemContext) interface{}
 
@@ -174,15 +156,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#iterationStatement.
 	VisitIterationStatement(ctx *IterationStatementContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#forCondition.
-	VisitForCondition(ctx *ForConditionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#forDeclaration.
-	VisitForDeclaration(ctx *ForDeclarationContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#forExpression.
-	VisitForExpression(ctx *ForExpressionContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#jumpStatement.
 	VisitJumpStatement(ctx *JumpStatementContext) interface{}

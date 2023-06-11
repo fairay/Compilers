@@ -15,7 +15,7 @@ import (
 )
 
 // little trick to define parser type
-var parser = baseparser.NewtinycParser(nil);
+var parser = baseparser.NewtinycParser(nil)
 
 type TreeShapeListener struct {
 	*baseparser.BasetinycListener
@@ -26,37 +26,37 @@ func NewTreeShapeListener() *TreeShapeListener {
 }
 
 func (listener *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
-    name := parser.RuleNames[ctx.GetRuleIndex()]
+	name := parser.RuleNames[ctx.GetRuleIndex()]
 	log.Printf("[%30s] %s\n", name, ctx.GetText())
 }
 
 func main() {
 	module, err := walkTree(utils.Config().SourcePath)
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
-    addMainStartup(module)
-    dumpModule(module)
+	addMainStartup(module)
+	dumpModule(module)
 }
 
 func dumpModule(module *ir.Module) {
-    filePath := utils.Config().OutputPath
+	filePath := utils.Config().OutputPath
 
-    // Create missing dirs
-    dirPath := filepath.Dir(filePath)
-    err := os.MkdirAll(dirPath, os.ModePerm)
-    if err != nil {
-        log.Panicf("Failed to create dirs for build path: %v", err)
-    }
-
-    err = os.WriteFile(
-        filePath,
-        []byte(module.String()),
-        0644,
-    )
+	// Create missing dirs
+	dirPath := filepath.Dir(filePath)
+	err := os.MkdirAll(dirPath, os.ModePerm)
 	if err != nil {
-        log.Panicf("Failed to write LLVM IR to file: %s", err.Error())
+		log.Panicf("Failed to create dirs for build path: %v", err)
+	}
+
+	err = os.WriteFile(
+		filePath,
+		[]byte(module.String()),
+		0644,
+	)
+	if err != nil {
+		log.Panicf("Failed to write LLVM IR to file: %s", err.Error())
 	}
 }
 
@@ -92,16 +92,16 @@ func walkTree(fileName string) (*ir.Module, error) {
 	parser.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 	parser.BuildParseTrees = true
 	tree := parser.CompilationUnit()
-    log.Println("Walking all tree nodes")
+	log.Println("Walking all tree nodes")
 	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
-    log.Println("All tree nodes traversed")
+	log.Println("All tree nodes traversed")
 
 	visitor := ast.NewVisitor()
 	visitor.VisitCompilationUnit(tree.(*baseparser.CompilationUnitContext))
 
-    return visitor.Module, nil
+	return visitor.Module, nil
 }
 
 func init() {
-    utils.Config(os.Args[1:]...)
+	utils.Config(os.Args[1:]...)
 }

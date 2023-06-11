@@ -27,14 +27,6 @@ func (v *BasetinycVisitor) VisitArgumentExpressionList(ctx *ArgumentExpressionLi
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitUnaryExpression(ctx *UnaryExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitUnaryOperator(ctx *UnaryOperatorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitCastExpression(ctx *CastExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -55,10 +47,6 @@ func (v *BasetinycVisitor) VisitEqualityExpression(ctx *EqualityExpressionContex
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitInclusiveOrExpression(ctx *InclusiveOrExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitLogicalAndExpression(ctx *LogicalAndExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -76,10 +64,6 @@ func (v *BasetinycVisitor) VisitAssignmentOperator(ctx *AssignmentOperatorContex
 }
 
 func (v *BasetinycVisitor) VisitExpression(ctx *ExpressionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitConstantExpression(ctx *ConstantExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -171,10 +155,6 @@ func (v *BasetinycVisitor) VisitAbstractDeclarator(ctx *AbstractDeclaratorContex
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitDirectAbstractDeclarator(ctx *DirectAbstractDeclaratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitTypedefName(ctx *TypedefNameContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -211,10 +191,6 @@ func (v *BasetinycVisitor) VisitCompoundStatement(ctx *CompoundStatementContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitBlockItemList(ctx *BlockItemListContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitBlockItem(ctx *BlockItemContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -228,18 +204,6 @@ func (v *BasetinycVisitor) VisitSelectionStatement(ctx *SelectionStatementContex
 }
 
 func (v *BasetinycVisitor) VisitIterationStatement(ctx *IterationStatementContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitForCondition(ctx *ForConditionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitForDeclaration(ctx *ForDeclarationContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitForExpression(ctx *ForExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

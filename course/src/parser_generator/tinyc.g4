@@ -35,7 +35,6 @@ primaryExpression
     |   Constant
     |   StringLiteral+
     |   '(' expression ')'
-    |   '(' compoundStatement ')' // Blocks (GCC extension)
     ;
 
 genericAssocList
@@ -43,7 +42,7 @@ genericAssocList
     ;
 
 genericAssociation
-    :   (typeName | 'default') ':' assignmentExpression
+    :   typeName ':' assignmentExpression
     ;
 
 postfixExpression
@@ -53,9 +52,6 @@ postfixExpression
     )
     ('[' expression ']'
     | '(' argumentExpressionList? ')'
-    | ('.' | '->') Identifier
-    | '++'
-    | '--'
     )*
     ;
 
@@ -63,21 +59,9 @@ argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
-unaryExpression
-    :
-    (postfixExpression
-    |   unaryOperator castExpression
-    |   '&&' Identifier // GCC extension address of label
-    )
-    ;
-
-unaryOperator
-    :   '&' | '*' | '+' | '-' | '~' | '!'
-    ;
-
 castExpression
     :   '(' typeName ')' castExpression
-    |   unaryExpression
+    |   postfixExpression
     |   DigitSequence // for
     ;
 
@@ -97,12 +81,8 @@ equalityExpression
     :   relationalExpression (('=='| '!=') relationalExpression)*
     ;
 
-inclusiveOrExpression
-    :   equalityExpression ('|' equalityExpression)*
-    ;
-
 logicalAndExpression
-    :   inclusiveOrExpression ('&&' inclusiveOrExpression)*
+    :   equalityExpression ('&&' equalityExpression)*
     ;
 
 logicalOrExpression
@@ -111,7 +91,7 @@ logicalOrExpression
 
 assignmentExpression
     :   logicalOrExpression
-    |   unaryExpression assignmentOperator assignmentExpression
+    |   postfixExpression assignmentOperator assignmentExpression
     |   DigitSequence // for
     ;
 
@@ -275,16 +255,10 @@ statement
 
 labeledStatement
     :   Identifier ':' statement
-    |   'case' logicalOrExpression ':' statement
-    |   'default' ':' statement
     ;
 
 compoundStatement
-    :   '{' blockItemList? '}'
-    ;
-
-blockItemList
-    :   blockItem+
+    :   '{' blockItem* '}'
     ;
 
 blockItem
@@ -303,34 +277,22 @@ selectionStatement
 
 iterationStatement
     :   While '(' expression ')' statement
-    |   Do statement While '(' expression ')' ';'
-    |   For '(' forCondition ')' statement
     ;
 
 //    |   'for' '(' expression? ';' expression?  ';' forUpdate? ')' statement
 //    |   For '(' declaration  expression? ';' expression? ')' statement
 
-forCondition
-	:   (forDeclaration | expression?) ';' forExpression? ';' forExpression?
-	;
+// jumpStatement
+//     :   ('goto' Identifier
+//     |   'continue'
+//     |   'break'
+//     |   'return' expression?
+//     |   'goto' postfixExpression // GCC extension
+//     )
+//     ';'
+//     ;
 
-forDeclaration
-    :   declarationSpecifiers initDeclaratorList?
-    ;
-
-forExpression
-    :   assignmentExpression (',' assignmentExpression)*
-    ;
-
-jumpStatement
-    :   ('goto' Identifier
-    |   'continue'
-    |   'break'
-    |   'return' expression?
-    |   'goto' unaryExpression // GCC extension
-    )
-    ';'
-    ;
+jumpStatement: 'return' expression ';' ;
 
 compilationUnit
     :   externalDeclaration+ EOF
@@ -352,17 +314,13 @@ declarationList
 
 Auto : 'auto';
 Break : 'break';
-Case : 'case';
 Char : 'char';
 Const : 'const';
 Continue : 'continue';
-Default : 'default';
-Do : 'do';
 Double : 'double';
 Else : 'else';
 Extern : 'extern';
 Float : 'float';
-For : 'for';
 Goto : 'goto';
 If : 'if';
 Inline : 'inline';

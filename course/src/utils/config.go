@@ -39,7 +39,6 @@ func Config(path ...string) *ConfigT {
 	return globalConfig
 }
 
-
 // loadConfigFromFile загружает конфигурацию из JSON-файла по заданному пути.
 func loadConfigFromFile(filePath string) (*ConfigT, error) {
 	file, err := os.Open(filePath)
