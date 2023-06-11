@@ -95,10 +95,6 @@ func (v *BasetinycVisitor) VisitDeclarationSpecifiers2(ctx *DeclarationSpecifier
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitDeclarationSpecifier(ctx *DeclarationSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitInitDeclaratorList(ctx *InitDeclaratorListContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -143,19 +139,11 @@ func (v *BasetinycVisitor) VisitDeclarator(ctx *DeclaratorContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitDirectDeclarator(ctx *DirectDeclaratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitGccAttribute(ctx *GccAttributeContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
 func (v *BasetinycVisitor) VisitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitPointer(ctx *PointerContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

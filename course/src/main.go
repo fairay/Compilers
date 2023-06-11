@@ -4,14 +4,13 @@ import (
 	"course/compilers/ast"
 	baseparser "course/compilers/parser"
 	"course/compilers/utils"
-	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/antlr4-go/antlr/v4"
 
 	"github.com/llir/llvm/ir"
-	"github.com/llir/llvm/ir/constant"
 	"github.com/llir/llvm/ir/types"
 )
 
@@ -32,18 +31,27 @@ func (listener *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
 }
 
 func main() {
-	walkTree(utils.Config().SourcePath)
-	module, err := minimalIR()
+	module, err := walkTree(utils.Config().SourcePath)
     if err != nil {
         panic(err)
     }
 
+    addMainStartup(module)
     dumpModule(module)
 }
 
 func dumpModule(module *ir.Module) {
-	err := os.WriteFile(
-        utils.Config().OutputPath,
+    filePath := utils.Config().OutputPath
+
+    // Create missing dirs
+    dirPath := filepath.Dir(filePath)
+    err := os.MkdirAll(dirPath, os.ModePerm)
+    if err != nil {
+        log.Panicf("Failed to create dirs for build path: %v", err)
+    }
+
+    err = os.WriteFile(
+        filePath,
         []byte(module.String()),
         0644,
     )
@@ -52,7 +60,30 @@ func dumpModule(module *ir.Module) {
 	}
 }
 
-func walkTree(fileName string) {
+// addMainStartup adds a startup function "mainCRTStartup" to the given module.
+// It looks for a function named "main" in the module and generates a call to it
+// from the startup function. The startup function is responsible for invoking
+// the main function when the program starts.
+func addMainStartup(module *ir.Module) {
+	startup := module.NewFunc("mainCRTStartup", types.I32)
+	entry := startup.NewBlock("")
+
+	var mainFunc *ir.Func
+	for _, f := range module.Funcs {
+		if f.Name() == "main" {
+			mainFunc = f
+			break
+		}
+	}
+	if mainFunc == nil {
+		panic(ast.NoMainError())
+	}
+
+	mainRes := entry.NewCall(mainFunc)
+	entry.NewRet(mainRes)
+}
+
+func walkTree(fileName string) (*ir.Module, error) {
 	input, _ := antlr.NewFileStream(fileName)
 	lexer := baseparser.NewtinycLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.LexerDefaultTokenChannel)
@@ -61,63 +92,15 @@ func walkTree(fileName string) {
 	parser.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 	parser.BuildParseTrees = true
 	tree := parser.CompilationUnit()
+    log.Println("Walking all tree nodes")
 	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
+    log.Println("All tree nodes traversed")
 
 	visitor := ast.NewVisitor()
 	visitor.VisitCompilationUnit(tree.(*baseparser.CompilationUnitContext))
+
+    return visitor.Module, nil
 }
-
-
-func minimalIR() (*ir.Module, error) {
-    m := ir.NewModule()
-    mainFunc := m.NewFunc("main", types.I32)
-    entry := mainFunc.NewBlock("")
-    entry.NewRet(constant.NewInt(types.I32, 42))
-    return m, nil
-}
-
-
-func createIR() (*ir.Module, error) {
-    // Создаём нужные типы и константы
-    i32 := types.I32
-    zero := constant.NewInt(i32, 0)
-    a := constant.NewInt(i32, 0x15A4E35) // умножаем PRNG.
-    c := constant.NewInt(i32, 1)         // инкрементируем PRNG.
-
-    // Создаём новый модуль LLVM IR.
-    m := ir.NewModule()
-
-    // Создаём объявление внешней функции и добавляем его к модулю.
-    //
-    //    int abs(int x);
-    abs := m.NewFunc("abs", i32, ir.NewParam("x", i32))
-
-    // Создаём определение глобальной переменной и добавляем его к модулю.
-    //
-    //    int seed = 0;
-    seed := m.NewGlobalDef("seed", zero)
-
-    // Создаём определение функции и добавляем его к модулю.
-    //
-    //    int rand(void) { ... }
-    rand := m.NewFunc("rand", i32)
-
-    // Создаём неименованный входной базовый блок и добавляем его к функции `rand`.
-    entry := rand.NewBlock("")
-
-    // Создаём команды и добавляем их к входному базовому блоку.
-    tmp1 := entry.NewLoad(seed.Type(), seed)
-    tmp2 := entry.NewMul(tmp1, a)
-    tmp3 := entry.NewAdd(tmp2, c)
-    // entry.NewStore(tmp3, seed)
-    tmp4 := entry.NewCall(abs, tmp3)
-    entry.NewRet(tmp4)
-
-    // Печатаем ассемблер LLVM IR этого модуля.
-    fmt.Println(m)
-    return m, nil
-}
-
 
 func init() {
     utils.Config(os.Args[1:]...)

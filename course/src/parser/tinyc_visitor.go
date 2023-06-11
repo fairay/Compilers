@@ -73,9 +73,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#declarationSpecifiers2.
 	VisitDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) interface{}
 
-	// Visit a parse tree produced by tinycParser#declarationSpecifier.
-	VisitDeclarationSpecifier(ctx *DeclarationSpecifierContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#initDeclaratorList.
 	VisitInitDeclaratorList(ctx *InitDeclaratorListContext) interface{}
 
@@ -109,17 +106,11 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#declarator.
 	VisitDeclarator(ctx *DeclaratorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#directDeclarator.
-	VisitDirectDeclarator(ctx *DirectDeclaratorContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#gccAttribute.
 	VisitGccAttribute(ctx *GccAttributeContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#nestedParenthesesBlock.
 	VisitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#pointer.
-	VisitPointer(ctx *PointerContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#parameterTypeList.
 	VisitParameterTypeList(ctx *ParameterTypeListContext) interface{}

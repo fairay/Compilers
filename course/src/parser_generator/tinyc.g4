@@ -121,24 +121,16 @@ expression
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
-constantExpression
-    :   logicalOrExpression
-    ;
-
 declaration
     :   declarationSpecifiers initDeclaratorList? ';'
     ;
 
 declarationSpecifiers
-    :   declarationSpecifier+
+    :   typeSpecifier+
     ;
 
 declarationSpecifiers2
-    :   declarationSpecifier+
-    ;
-
-declarationSpecifier
-    :   typeSpecifier
+    :   typeSpecifier+
     ;
 
 initDeclaratorList
@@ -190,19 +182,15 @@ structDeclaratorList
 
 structDeclarator
     :   declarator
-    |   declarator? ':' constantExpression
+    |   declarator? ':' logicalOrExpression
     ;
 
 declarator
-    :   pointer? directDeclarator
-    ;
-
-directDeclarator
     :   Identifier
     |   '(' declarator ')'
-    |   directDeclarator '[' assignmentExpression? ']'
-    |   directDeclarator '(' parameterTypeList ')'
-    |   directDeclarator '(' identifierList? ')'
+    |   declarator '[' assignmentExpression? ']'
+    |   declarator '(' parameterTypeList ')'
+    |   declarator '(' identifierList? ')'
     |   Identifier ':' DigitSequence  // bit field
     ;
 
@@ -218,9 +206,6 @@ nestedParenthesesBlock
         )*
     ;
 
-pointer
-    :  (('*'|'^'))+ // ^ - Blocks language extension
-    ;
 
 parameterTypeList
     :   parameterList (',' '...')?
@@ -244,18 +229,13 @@ typeName
     ;
 
 abstractDeclarator
-    :   pointer
-    |   pointer? directAbstractDeclarator
-    ;
-
-directAbstractDeclarator
     :   '(' abstractDeclarator ')'
     |   '[' assignmentExpression? ']'
     |   '[' '*' ']'
     |   '(' parameterTypeList? ')'
-    |   directAbstractDeclarator '[' assignmentExpression? ']'
-    |   directAbstractDeclarator '[' '*' ']'
-    |   directAbstractDeclarator '(' parameterTypeList? ')'
+    |   abstractDeclarator '[' assignmentExpression? ']'
+    |   abstractDeclarator '[' '*' ']'
+    |   abstractDeclarator '(' parameterTypeList? ')'
     ;
 
 typedefName
@@ -280,7 +260,7 @@ designatorList
     ;
 
 designator
-    :   '[' constantExpression ']'
+    :   '[' logicalOrExpression ']'
     |   '.' Identifier
     ;
 
@@ -295,7 +275,7 @@ statement
 
 labeledStatement
     :   Identifier ':' statement
-    |   'case' constantExpression ':' statement
+    |   'case' logicalOrExpression ':' statement
     |   'default' ':' statement
     ;
 

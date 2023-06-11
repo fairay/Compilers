@@ -73,9 +73,6 @@ type tinycListener interface {
 	// EnterDeclarationSpecifiers2 is called when entering the declarationSpecifiers2 production.
 	EnterDeclarationSpecifiers2(c *DeclarationSpecifiers2Context)
 
-	// EnterDeclarationSpecifier is called when entering the declarationSpecifier production.
-	EnterDeclarationSpecifier(c *DeclarationSpecifierContext)
-
 	// EnterInitDeclaratorList is called when entering the initDeclaratorList production.
 	EnterInitDeclaratorList(c *InitDeclaratorListContext)
 
@@ -109,17 +106,11 @@ type tinycListener interface {
 	// EnterDeclarator is called when entering the declarator production.
 	EnterDeclarator(c *DeclaratorContext)
 
-	// EnterDirectDeclarator is called when entering the directDeclarator production.
-	EnterDirectDeclarator(c *DirectDeclaratorContext)
-
 	// EnterGccAttribute is called when entering the gccAttribute production.
 	EnterGccAttribute(c *GccAttributeContext)
 
 	// EnterNestedParenthesesBlock is called when entering the nestedParenthesesBlock production.
 	EnterNestedParenthesesBlock(c *NestedParenthesesBlockContext)
-
-	// EnterPointer is called when entering the pointer production.
-	EnterPointer(c *PointerContext)
 
 	// EnterParameterTypeList is called when entering the parameterTypeList production.
 	EnterParameterTypeList(c *ParameterTypeListContext)
@@ -274,9 +265,6 @@ type tinycListener interface {
 	// ExitDeclarationSpecifiers2 is called when exiting the declarationSpecifiers2 production.
 	ExitDeclarationSpecifiers2(c *DeclarationSpecifiers2Context)
 
-	// ExitDeclarationSpecifier is called when exiting the declarationSpecifier production.
-	ExitDeclarationSpecifier(c *DeclarationSpecifierContext)
-
 	// ExitInitDeclaratorList is called when exiting the initDeclaratorList production.
 	ExitInitDeclaratorList(c *InitDeclaratorListContext)
 
@@ -310,17 +298,11 @@ type tinycListener interface {
 	// ExitDeclarator is called when exiting the declarator production.
 	ExitDeclarator(c *DeclaratorContext)
 
-	// ExitDirectDeclarator is called when exiting the directDeclarator production.
-	ExitDirectDeclarator(c *DirectDeclaratorContext)
-
 	// ExitGccAttribute is called when exiting the gccAttribute production.
 	ExitGccAttribute(c *GccAttributeContext)
 
 	// ExitNestedParenthesesBlock is called when exiting the nestedParenthesesBlock production.
 	ExitNestedParenthesesBlock(c *NestedParenthesesBlockContext)
-
-	// ExitPointer is called when exiting the pointer production.
-	ExitPointer(c *PointerContext)
 
 	// ExitParameterTypeList is called when exiting the parameterTypeList production.
 	ExitParameterTypeList(c *ParameterTypeListContext)

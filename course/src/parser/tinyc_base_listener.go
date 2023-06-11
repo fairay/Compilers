@@ -152,12 +152,6 @@ func (s *BasetinycListener) EnterDeclarationSpecifiers2(ctx *DeclarationSpecifie
 // ExitDeclarationSpecifiers2 is called when production declarationSpecifiers2 is exited.
 func (s *BasetinycListener) ExitDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) {}
 
-// EnterDeclarationSpecifier is called when production declarationSpecifier is entered.
-func (s *BasetinycListener) EnterDeclarationSpecifier(ctx *DeclarationSpecifierContext) {}
-
-// ExitDeclarationSpecifier is called when production declarationSpecifier is exited.
-func (s *BasetinycListener) ExitDeclarationSpecifier(ctx *DeclarationSpecifierContext) {}
-
 // EnterInitDeclaratorList is called when production initDeclaratorList is entered.
 func (s *BasetinycListener) EnterInitDeclaratorList(ctx *InitDeclaratorListContext) {}
 
@@ -224,12 +218,6 @@ func (s *BasetinycListener) EnterDeclarator(ctx *DeclaratorContext) {}
 // ExitDeclarator is called when production declarator is exited.
 func (s *BasetinycListener) ExitDeclarator(ctx *DeclaratorContext) {}
 
-// EnterDirectDeclarator is called when production directDeclarator is entered.
-func (s *BasetinycListener) EnterDirectDeclarator(ctx *DirectDeclaratorContext) {}
-
-// ExitDirectDeclarator is called when production directDeclarator is exited.
-func (s *BasetinycListener) ExitDirectDeclarator(ctx *DirectDeclaratorContext) {}
-
 // EnterGccAttribute is called when production gccAttribute is entered.
 func (s *BasetinycListener) EnterGccAttribute(ctx *GccAttributeContext) {}
 
@@ -241,12 +229,6 @@ func (s *BasetinycListener) EnterNestedParenthesesBlock(ctx *NestedParenthesesBl
 
 // ExitNestedParenthesesBlock is called when production nestedParenthesesBlock is exited.
 func (s *BasetinycListener) ExitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) {}
-
-// EnterPointer is called when production pointer is entered.
-func (s *BasetinycListener) EnterPointer(ctx *PointerContext) {}
-
-// ExitPointer is called when production pointer is exited.
-func (s *BasetinycListener) ExitPointer(ctx *PointerContext) {}
 
 // EnterParameterTypeList is called when production parameterTypeList is entered.
 func (s *BasetinycListener) EnterParameterTypeList(ctx *ParameterTypeListContext) {}
