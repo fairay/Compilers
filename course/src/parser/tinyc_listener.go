@@ -58,9 +58,6 @@ type tinycListener interface {
 	// EnterDeclarationSpecifiers is called when entering the declarationSpecifiers production.
 	EnterDeclarationSpecifiers(c *DeclarationSpecifiersContext)
 
-	// EnterDeclarationSpecifiers2 is called when entering the declarationSpecifiers2 production.
-	EnterDeclarationSpecifiers2(c *DeclarationSpecifiers2Context)
-
 	// EnterInitDeclaratorList is called when entering the initDeclaratorList production.
 	EnterInitDeclaratorList(c *InitDeclaratorListContext)
 
@@ -69,18 +66,6 @@ type tinycListener interface {
 
 	// EnterTypeSpecifier is called when entering the typeSpecifier production.
 	EnterTypeSpecifier(c *TypeSpecifierContext)
-
-	// EnterStructOrUnionSpecifier is called when entering the structOrUnionSpecifier production.
-	EnterStructOrUnionSpecifier(c *StructOrUnionSpecifierContext)
-
-	// EnterStructOrUnion is called when entering the structOrUnion production.
-	EnterStructOrUnion(c *StructOrUnionContext)
-
-	// EnterStructDeclarationList is called when entering the structDeclarationList production.
-	EnterStructDeclarationList(c *StructDeclarationListContext)
-
-	// EnterStructDeclaration is called when entering the structDeclaration production.
-	EnterStructDeclaration(c *StructDeclarationContext)
 
 	// EnterSpecifierQualifierList is called when entering the specifierQualifierList production.
 	EnterSpecifierQualifierList(c *SpecifierQualifierListContext)
@@ -117,9 +102,6 @@ type tinycListener interface {
 
 	// EnterAbstractDeclarator is called when entering the abstractDeclarator production.
 	EnterAbstractDeclarator(c *AbstractDeclaratorContext)
-
-	// EnterTypedefName is called when entering the typedefName production.
-	EnterTypedefName(c *TypedefNameContext)
 
 	// EnterInitializer is called when entering the initializer production.
 	EnterInitializer(c *InitializerContext)
@@ -223,9 +205,6 @@ type tinycListener interface {
 	// ExitDeclarationSpecifiers is called when exiting the declarationSpecifiers production.
 	ExitDeclarationSpecifiers(c *DeclarationSpecifiersContext)
 
-	// ExitDeclarationSpecifiers2 is called when exiting the declarationSpecifiers2 production.
-	ExitDeclarationSpecifiers2(c *DeclarationSpecifiers2Context)
-
 	// ExitInitDeclaratorList is called when exiting the initDeclaratorList production.
 	ExitInitDeclaratorList(c *InitDeclaratorListContext)
 
@@ -234,18 +213,6 @@ type tinycListener interface {
 
 	// ExitTypeSpecifier is called when exiting the typeSpecifier production.
 	ExitTypeSpecifier(c *TypeSpecifierContext)
-
-	// ExitStructOrUnionSpecifier is called when exiting the structOrUnionSpecifier production.
-	ExitStructOrUnionSpecifier(c *StructOrUnionSpecifierContext)
-
-	// ExitStructOrUnion is called when exiting the structOrUnion production.
-	ExitStructOrUnion(c *StructOrUnionContext)
-
-	// ExitStructDeclarationList is called when exiting the structDeclarationList production.
-	ExitStructDeclarationList(c *StructDeclarationListContext)
-
-	// ExitStructDeclaration is called when exiting the structDeclaration production.
-	ExitStructDeclaration(c *StructDeclarationContext)
 
 	// ExitSpecifierQualifierList is called when exiting the specifierQualifierList production.
 	ExitSpecifierQualifierList(c *SpecifierQualifierListContext)
@@ -282,9 +249,6 @@ type tinycListener interface {
 
 	// ExitAbstractDeclarator is called when exiting the abstractDeclarator production.
 	ExitAbstractDeclarator(c *AbstractDeclaratorContext)
-
-	// ExitTypedefName is called when exiting the typedefName production.
-	ExitTypedefName(c *TypedefNameContext)
 
 	// ExitInitializer is called when exiting the initializer production.
 	ExitInitializer(c *InitializerContext)

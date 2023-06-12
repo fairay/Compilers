@@ -122,12 +122,6 @@ func (s *BasetinycListener) EnterDeclarationSpecifiers(ctx *DeclarationSpecifier
 // ExitDeclarationSpecifiers is called when production declarationSpecifiers is exited.
 func (s *BasetinycListener) ExitDeclarationSpecifiers(ctx *DeclarationSpecifiersContext) {}
 
-// EnterDeclarationSpecifiers2 is called when production declarationSpecifiers2 is entered.
-func (s *BasetinycListener) EnterDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) {}
-
-// ExitDeclarationSpecifiers2 is called when production declarationSpecifiers2 is exited.
-func (s *BasetinycListener) ExitDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) {}
-
 // EnterInitDeclaratorList is called when production initDeclaratorList is entered.
 func (s *BasetinycListener) EnterInitDeclaratorList(ctx *InitDeclaratorListContext) {}
 
@@ -145,30 +139,6 @@ func (s *BasetinycListener) EnterTypeSpecifier(ctx *TypeSpecifierContext) {}
 
 // ExitTypeSpecifier is called when production typeSpecifier is exited.
 func (s *BasetinycListener) ExitTypeSpecifier(ctx *TypeSpecifierContext) {}
-
-// EnterStructOrUnionSpecifier is called when production structOrUnionSpecifier is entered.
-func (s *BasetinycListener) EnterStructOrUnionSpecifier(ctx *StructOrUnionSpecifierContext) {}
-
-// ExitStructOrUnionSpecifier is called when production structOrUnionSpecifier is exited.
-func (s *BasetinycListener) ExitStructOrUnionSpecifier(ctx *StructOrUnionSpecifierContext) {}
-
-// EnterStructOrUnion is called when production structOrUnion is entered.
-func (s *BasetinycListener) EnterStructOrUnion(ctx *StructOrUnionContext) {}
-
-// ExitStructOrUnion is called when production structOrUnion is exited.
-func (s *BasetinycListener) ExitStructOrUnion(ctx *StructOrUnionContext) {}
-
-// EnterStructDeclarationList is called when production structDeclarationList is entered.
-func (s *BasetinycListener) EnterStructDeclarationList(ctx *StructDeclarationListContext) {}
-
-// ExitStructDeclarationList is called when production structDeclarationList is exited.
-func (s *BasetinycListener) ExitStructDeclarationList(ctx *StructDeclarationListContext) {}
-
-// EnterStructDeclaration is called when production structDeclaration is entered.
-func (s *BasetinycListener) EnterStructDeclaration(ctx *StructDeclarationContext) {}
-
-// ExitStructDeclaration is called when production structDeclaration is exited.
-func (s *BasetinycListener) ExitStructDeclaration(ctx *StructDeclarationContext) {}
 
 // EnterSpecifierQualifierList is called when production specifierQualifierList is entered.
 func (s *BasetinycListener) EnterSpecifierQualifierList(ctx *SpecifierQualifierListContext) {}
@@ -241,12 +211,6 @@ func (s *BasetinycListener) EnterAbstractDeclarator(ctx *AbstractDeclaratorConte
 
 // ExitAbstractDeclarator is called when production abstractDeclarator is exited.
 func (s *BasetinycListener) ExitAbstractDeclarator(ctx *AbstractDeclaratorContext) {}
-
-// EnterTypedefName is called when production typedefName is entered.
-func (s *BasetinycListener) EnterTypedefName(ctx *TypedefNameContext) {}
-
-// ExitTypedefName is called when production typedefName is exited.
-func (s *BasetinycListener) ExitTypedefName(ctx *TypedefNameContext) {}
 
 // EnterInitializer is called when production initializer is entered.
 func (s *BasetinycListener) EnterInitializer(ctx *InitializerContext) {}

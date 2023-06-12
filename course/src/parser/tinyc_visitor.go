@@ -58,9 +58,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#declarationSpecifiers.
 	VisitDeclarationSpecifiers(ctx *DeclarationSpecifiersContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#declarationSpecifiers2.
-	VisitDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) interface{}
-
 	// Visit a parse tree produced by tinycParser#initDeclaratorList.
 	VisitInitDeclaratorList(ctx *InitDeclaratorListContext) interface{}
 
@@ -69,18 +66,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#typeSpecifier.
 	VisitTypeSpecifier(ctx *TypeSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#structOrUnionSpecifier.
-	VisitStructOrUnionSpecifier(ctx *StructOrUnionSpecifierContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#structOrUnion.
-	VisitStructOrUnion(ctx *StructOrUnionContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#structDeclarationList.
-	VisitStructDeclarationList(ctx *StructDeclarationListContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#structDeclaration.
-	VisitStructDeclaration(ctx *StructDeclarationContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#specifierQualifierList.
 	VisitSpecifierQualifierList(ctx *SpecifierQualifierListContext) interface{}
@@ -117,9 +102,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#abstractDeclarator.
 	VisitAbstractDeclarator(ctx *AbstractDeclaratorContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#typedefName.
-	VisitTypedefName(ctx *TypedefNameContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#initializer.
 	VisitInitializer(ctx *InitializerContext) interface{}

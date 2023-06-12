@@ -2,7 +2,6 @@ package ast
 
 import (
 	bp "course/compilers/parser" // baseparser
-	"log"
 	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -16,8 +15,9 @@ import (
 type Visitor struct {
 	bp.BasetinycVisitor
 
-	Module   *ir.Module
-	curBlock *ir.Block
+	Module      *ir.Module
+	curBlock    *ir.Block
+	curDeclType types.Type
 }
 
 func NewVisitor() *Visitor {
@@ -25,7 +25,6 @@ func NewVisitor() *Visitor {
 }
 
 func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
-	log.Println("VisitCompilationUnit")
 	v.Module = ir.NewModule()
 
 	for _, decl := range ctx.AllExternalDeclaration() {
@@ -35,7 +34,6 @@ func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface
 }
 
 func (v *Visitor) VisitExternalDeclaration(ctx *bp.ExternalDeclarationContext) interface{} {
-	log.Println("VisitExternalDeclaration")
 	if d := ctx.FunctionDefinition(); d != nil {
 		v.VisitFunctionDefinition(d.(*bp.FunctionDefinitionContext))
 	} else {
@@ -45,7 +43,6 @@ func (v *Visitor) VisitExternalDeclaration(ctx *bp.ExternalDeclarationContext) i
 }
 
 func (v *Visitor) VisitFunctionDefinition(ctx *bp.FunctionDefinitionContext) interface{} {
-	log.Println("VisitFunctionDefinition")
 	retType := types.I32           // TODO: VisitDeclarationSpecifiers
 	name := "main"                 // TODO: VisitDeclarator
 	params := make([]*ir.Param, 0) // TODO: VisitDeclarationList
@@ -91,8 +88,17 @@ func (v *Visitor) VisitBlockItem(ctx *bp.BlockItemContext) interface{} {
 func (v *Visitor) VisitStatement(ctx *bp.StatementContext) interface{} {
 	if nodeCtx := ctx.JumpStatement(); nodeCtx != nil {
 		v.VisitJumpStatement(nodeCtx.(*bp.JumpStatementContext))
+	} else if nodeCtx := ctx.ExpressionStatement(); nodeCtx != nil {
+		v.VisitExpressionStatement(nodeCtx.(*bp.ExpressionStatementContext))
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
+	}
+	return nil
+}
+
+func (v *Visitor) VisitExpressionStatement(ctx *bp.ExpressionStatementContext) interface{} {
+	if nodeCtx := ctx.Expression(); nodeCtx != nil {
+		v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
 	}
 	return nil
 }
@@ -118,12 +124,17 @@ func (v *Visitor) VisitExpression(ctx *bp.ExpressionContext) value.Value {
 // assignmentExpression
 //
 //	:   logicalOrExpression
-//	|   unaryExpression assignmentOperator assignmentExpression
-//	|   DigitSequence // for
+//	|   postfixExpression assignmentOperator assignmentExpression
 //	;
 func (v *Visitor) VisitAssignmentExpression(ctx *bp.AssignmentExpressionContext) value.Value {
 	if nodeCtx := ctx.LogicalOrExpression(); nodeCtx != nil {
 		return v.VisitLogicalOrExpression(nodeCtx.(*bp.LogicalOrExpressionContext))
+	} else if assigmentCtx := ctx.AssignmentExpression(); assigmentCtx != nil {
+		postfixCtx := ctx.PostfixExpression()
+		postfix := v.VisitPostfixExpression(postfixCtx.(*bp.PostfixExpressionContext))
+		assigment := v.VisitAssignmentExpression(assigmentCtx.(*bp.AssignmentExpressionContext))
+		v.curBlock.NewStore(assigment, postfix)
+		return assigment
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
@@ -219,9 +230,9 @@ func (v *Visitor) VisitAdditiveExpression(ctx *bp.AdditiveExpressionContext) val
 			nextExpr := v.VisitMultiplicativeExpression(nodeCtx.(*bp.MultiplicativeExpressionContext))
 			switch operation {
 			case "+":
-				expr = v.curBlock.NewAdd(expr, nextExpr)
+				expr = v.curBlock.NewAdd(v.sameT(expr, nextExpr))
 			case "-":
-				expr = v.curBlock.NewSub(expr, nextExpr)
+				expr = v.curBlock.NewSub(v.sameT(expr, nextExpr))
 			}
 		}
 	}
@@ -242,11 +253,11 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 			nextExpr := v.VisitCastExpression(nodeCtx.(*bp.CastExpressionContext))
 			switch operation {
 			case "*":
-				expr = v.curBlock.NewMul(expr, nextExpr)
+				expr = v.curBlock.NewMul(v.sameT(expr, nextExpr))
 			case "/":
-				expr = v.curBlock.NewSDiv(expr, nextExpr)
+				expr = v.curBlock.NewSDiv(v.sameT(expr, nextExpr))
 			case "%":
-				expr = v.curBlock.NewSRem(expr, nextExpr)
+				expr = v.curBlock.NewSRem(v.sameT(expr, nextExpr))
 			}
 		}
 	}
@@ -257,7 +268,6 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 //
 //	:   '(' typeName ')' castExpression
 //	|   postfixExpression
-//	|   DigitSequence // for
 //	;
 func (v *Visitor) VisitCastExpression(ctx *bp.CastExpressionContext) value.Value {
 	if nodeCtx := ctx.PostfixExpression(); nodeCtx != nil {
@@ -310,6 +320,13 @@ func (v *Visitor) VisitPrimaryExpression(ctx *bp.PrimaryExpressionContext) value
 		return constant.NewInt(types.I32, int64(val))
 	} else if nodeCtx := ctx.Expression(); nodeCtx != nil {
 		return v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
+	} else if nodeCtx := ctx.Identifier(); nodeCtx != nil {
+		name := ctx.GetText()
+		id := getVariableByName(v.curBlock, name)
+		if id == nil {
+			panic(UndefindedError(name))
+		}
+		return id
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}

@@ -62,7 +62,6 @@ argumentExpressionList
 castExpression
     :   '(' typeName ')' castExpression
     |   postfixExpression
-    |   DigitSequence // for
     ;
 
 multiplicativeExpression
@@ -92,7 +91,6 @@ logicalOrExpression
 assignmentExpression
     :   logicalOrExpression
     |   postfixExpression assignmentOperator assignmentExpression
-    |   DigitSequence // for
     ;
 
 assignmentOperator: '=';
@@ -109,10 +107,6 @@ declarationSpecifiers
     :   typeSpecifier+
     ;
 
-declarationSpecifiers2
-    :   typeSpecifier+
-    ;
-
 initDeclaratorList
     :   initDeclarator (',' initDeclarator)*
     ;
@@ -122,34 +116,9 @@ initDeclarator
     ;
 
 typeSpecifier
-    :   'void'
-    |   'char'
-    |   'short'
+    :   'char'
     |   'int'
     |   'float'
-    |   'double'
-    |   'signed'
-    |   structOrUnionSpecifier
-    |   typedefName
-    ;
-
-structOrUnionSpecifier
-    :   structOrUnion Identifier? '{' structDeclarationList '}'
-    |   structOrUnion Identifier
-    ;
-
-structOrUnion
-    :   'struct'
-    |   'union'
-    ;
-
-structDeclarationList
-    :   structDeclaration+
-    ;
-
-structDeclaration // The first two rules have priority order and cannot be simplified to one expression.
-    :   specifierQualifierList structDeclaratorList ';'
-    |   specifierQualifierList ';'
     ;
 
 specifierQualifierList
@@ -171,7 +140,6 @@ declarator
     |   declarator '[' assignmentExpression? ']'
     |   declarator '(' parameterTypeList ')'
     |   declarator '(' identifierList? ')'
-    |   Identifier ':' DigitSequence  // bit field
     ;
 
 
@@ -196,8 +164,7 @@ parameterList
     ;
 
 parameterDeclaration
-    :   declarationSpecifiers declarator
-    |   declarationSpecifiers2 abstractDeclarator?
+    :   declarationSpecifiers (declarator | abstractDeclarator?)
     ;
 
 identifierList
@@ -216,10 +183,6 @@ abstractDeclarator
     |   abstractDeclarator '[' assignmentExpression? ']'
     |   abstractDeclarator '[' '*' ']'
     |   abstractDeclarator '(' parameterTypeList? ')'
-    ;
-
-typedefName
-    :   Identifier
     ;
 
 initializer
@@ -317,7 +280,6 @@ Break : 'break';
 Char : 'char';
 Const : 'const';
 Continue : 'continue';
-Double : 'double';
 Else : 'else';
 Extern : 'extern';
 Float : 'float';
@@ -328,14 +290,11 @@ Int : 'int';
 Register : 'register';
 Restrict : 'restrict';
 Return : 'return';
-Short : 'short';
-Signed : 'signed';
 Sizeof : 'sizeof';
 Struct : 'struct';
 Switch : 'switch';
 Typedef : 'typedef';
 Union : 'union';
-Void : 'void';
 While : 'while';
 
 Noreturn : '_Noreturn';

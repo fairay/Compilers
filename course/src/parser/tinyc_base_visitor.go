@@ -75,10 +75,6 @@ func (v *BasetinycVisitor) VisitDeclarationSpecifiers(ctx *DeclarationSpecifiers
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitDeclarationSpecifiers2(ctx *DeclarationSpecifiers2Context) interface{} {
-	return v.VisitChildren(ctx)
-}
-
 func (v *BasetinycVisitor) VisitInitDeclaratorList(ctx *InitDeclaratorListContext) interface{} {
 	return v.VisitChildren(ctx)
 }
@@ -88,22 +84,6 @@ func (v *BasetinycVisitor) VisitInitDeclarator(ctx *InitDeclaratorContext) inter
 }
 
 func (v *BasetinycVisitor) VisitTypeSpecifier(ctx *TypeSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitStructOrUnionSpecifier(ctx *StructOrUnionSpecifierContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitStructOrUnion(ctx *StructOrUnionContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitStructDeclarationList(ctx *StructDeclarationListContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitStructDeclaration(ctx *StructDeclarationContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -152,10 +132,6 @@ func (v *BasetinycVisitor) VisitTypeName(ctx *TypeNameContext) interface{} {
 }
 
 func (v *BasetinycVisitor) VisitAbstractDeclarator(ctx *AbstractDeclaratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitTypedefName(ctx *TypedefNameContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
