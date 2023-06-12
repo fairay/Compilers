@@ -154,6 +154,7 @@ func (v *Visitor) VisitLogicalAndExpression(ctx *bp.LogicalAndExpressionContext)
 }
 
 func (v *Visitor) VisitEqualityExpression(ctx *bp.EqualityExpressionContext) value.Value {
+	// TODO: support float
 	var expr value.Value
 	var pred enum.IPred
 	for index, nodeCtx := range ctx.GetChildren() {
@@ -170,13 +171,13 @@ func (v *Visitor) VisitEqualityExpression(ctx *bp.EqualityExpressionContext) val
 		} else {
 			nextExpr := v.VisitRelationalExpression(nodeCtx.(*bp.RelationalExpressionContext))
 			expr = v.curBlock.NewICmp(pred, expr, nextExpr)
-			// TODO: float cmp?
 		}
 	}
 	return expr
 }
 
 func (v *Visitor) VisitRelationalExpression(ctx *bp.RelationalExpressionContext) value.Value {
+	// TODO: support float
 	var expr value.Value
 	var pred enum.IPred
 	for index, nodeCtx := range ctx.GetChildren() {
@@ -197,33 +198,54 @@ func (v *Visitor) VisitRelationalExpression(ctx *bp.RelationalExpressionContext)
 		} else {
 			nextExpr := v.VisitAdditiveExpression(nodeCtx.(*bp.AdditiveExpressionContext))
 			expr = v.curBlock.NewICmp(pred, expr, nextExpr)
-			// TODO: float cmp?
 		}
 	}
 	return expr
 }
 
 func (v *Visitor) VisitAdditiveExpression(ctx *bp.AdditiveExpressionContext) value.Value {
+	// TODO: support float
 	var expr value.Value
+	var operation string
 	for index, nodeCtx := range ctx.GetChildren() {
 		if index%2 == 1 {
+			node := nodeCtx.(antlr.TerminalNode)
+			operation = node.GetText()
 		} else if index == 0 {
 			expr = v.VisitMultiplicativeExpression(nodeCtx.(*bp.MultiplicativeExpressionContext))
 		} else {
-			// TODO: support cmp?
+			nextExpr := v.VisitMultiplicativeExpression(nodeCtx.(*bp.MultiplicativeExpressionContext))
+			switch operation {
+			case "+":
+				expr = v.curBlock.NewAdd(expr, nextExpr)
+			case "-":
+				expr = v.curBlock.NewSub(expr, nextExpr)
+			}
 		}
 	}
 	return expr
 }
 
 func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpressionContext) value.Value {
+	// TODO: support float
 	var expr value.Value
+	var operation string
 	for index, nodeCtx := range ctx.GetChildren() {
 		if index%2 == 1 {
+			node := nodeCtx.(antlr.TerminalNode)
+			operation = node.GetText()
 		} else if index == 0 {
 			expr = v.VisitCastExpression(nodeCtx.(*bp.CastExpressionContext))
 		} else {
-			// TODO: support cmp?
+			nextExpr := v.VisitCastExpression(nodeCtx.(*bp.CastExpressionContext))
+			switch operation {
+			case "*":
+				expr = v.curBlock.NewMul(expr, nextExpr)
+			case "/":
+				expr = v.curBlock.NewSDiv(expr, nextExpr)
+			case "%":
+				expr = v.curBlock.NewSRem(expr, nextExpr)
+			}
 		}
 	}
 	return expr
@@ -281,6 +303,8 @@ func (v *Visitor) VisitPrimaryExpression(ctx *bp.PrimaryExpressionContext) value
 			panic(err)
 		}
 		return constant.NewInt(types.I32, int64(val))
+	} else if nodeCtx := ctx.Expression(); nodeCtx != nil {
+		return v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}

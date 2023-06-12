@@ -1,5 +1,5 @@
 /* Hello World program */
 
 int main() {
-    return 42;
+    return (2 + 2) * 2 + 2;
 }
