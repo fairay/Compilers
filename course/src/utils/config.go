@@ -3,8 +3,9 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -16,13 +17,13 @@ type CompileConfigT struct {
 	ExecutablePath string
 }
 
-func NewCompileConfig(sourcePath string) *CompileConfigT {
+func NewCompileConfig(sourcePath, buildDir string) *CompileConfigT {
 	return &CompileConfigT{
-		BuildDir:       "./build",
+		BuildDir:       buildDir,
 		SourcePath:     sourcePath,
-		IRPath:         "./build/temp.ll",
-		ObjectPath:     "./build/temp.obj",
-		ExecutablePath: "./build/temp.exe",
+		IRPath:         filepath.Join(buildDir, "temp.ll"),
+		ObjectPath:     filepath.Join(buildDir, "temp.obj"),
+		ExecutablePath: filepath.Join(buildDir, "temp.exe"),
 	}
 }
 
@@ -33,10 +34,8 @@ type ConfigT struct {
 }
 
 var (
-	// globalConfig хранит глобальный экземпляр конфигурации
 	globalConfig *ConfigT
-	// once используется для инициализации конфигурации только один раз
-	once sync.Once
+	once         sync.Once
 )
 
 func Config(path ...string) *ConfigT {
@@ -60,12 +59,12 @@ func Config(path ...string) *ConfigT {
 
 func CompileConfig() *CompileConfigT {
 	c := Config()
-	config := NewCompileConfig(c.SourcePath)
+	config := NewCompileConfig(c.SourcePath, "./build")
+	config.IRPath = c.IRPath
 	config.ExecutablePath = c.ExecutablePath
 	return config
 }
 
-// loadConfigFromFile загружает конфигурацию из JSON-файла по заданному пути.
 func loadConfigFromFile(filePath string) (*ConfigT, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -73,7 +72,7 @@ func loadConfigFromFile(filePath string) (*ConfigT, error) {
 	}
 	defer file.Close()
 
-	data, err := ioutil.ReadAll(file)
+	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}

@@ -102,7 +102,3 @@ func buildModule(fileName string) (*ir.Module, error) {
 	addMainStartup(visitor.Module)
 	return visitor.Module, nil
 }
-
-func init() {
-	utils.Config(os.Args[1:]...)
-}
