@@ -1,4 +1,5 @@
 {
     "source_path": "examples/helloworld.c",
-	"output_path": "build/output.ll"
+    "ir_path": "build/output.ll",
+	"executable_path": "build/output.exe"
 }

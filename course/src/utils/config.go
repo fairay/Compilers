@@ -8,9 +8,28 @@ import (
 	"sync"
 )
 
+type CompileConfigT struct {
+	BuildDir       string
+	SourcePath     string
+	IRPath         string
+	ObjectPath     string
+	ExecutablePath string
+}
+
+func NewCompileConfig(sourcePath string) *CompileConfigT {
+	return &CompileConfigT{
+		BuildDir:       "./build",
+		SourcePath:     sourcePath,
+		IRPath:         "./build/temp.ll",
+		ObjectPath:     "./build/temp.obj",
+		ExecutablePath: "./build/temp.exe",
+	}
+}
+
 type ConfigT struct {
-	SourcePath string `json:"source_path"`
-	OutputPath string `json:"output_path"`
+	SourcePath     string `json:"source_path"`
+	IRPath         string `json:"ir_path"`
+	ExecutablePath string `json:"executable_path"`
 }
 
 var (
@@ -39,6 +58,13 @@ func Config(path ...string) *ConfigT {
 	return globalConfig
 }
 
+func CompileConfig() *CompileConfigT {
+	c := Config()
+	config := NewCompileConfig(c.SourcePath)
+	config.ExecutablePath = c.ExecutablePath
+	return config
+}
+
 // loadConfigFromFile загружает конфигурацию из JSON-файла по заданному пути.
 func loadConfigFromFile(filePath string) (*ConfigT, error) {
 	file, err := os.Open(filePath)
@@ -60,10 +86,3 @@ func loadConfigFromFile(filePath string) (*ConfigT, error) {
 
 	return &config, nil
 }
-
-// func init() {
-// 	Config = &ConfigT{
-// 		SourcePath: "examples/example1.c",
-// 		OutputPath: "build/output.ll",
-// 	}
-// }

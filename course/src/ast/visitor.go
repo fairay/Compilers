@@ -80,13 +80,14 @@ func (v *Visitor) VisitBlockItem(ctx *bp.BlockItemContext) interface{} {
 }
 
 // statement
-//     :   labeledStatement
-//     |   compoundStatement
-//     |   expressionStatement
-//     |   selectionStatement
-//     |   iterationStatement
-//     |   jumpStatement
-//     ;
+//
+//	:   labeledStatement
+//	|   compoundStatement
+//	|   expressionStatement
+//	|   selectionStatement
+//	|   iterationStatement
+//	|   jumpStatement
+//	;
 func (v *Visitor) VisitStatement(ctx *bp.StatementContext) interface{} {
 	if nodeCtx := ctx.JumpStatement(); nodeCtx != nil {
 		v.VisitJumpStatement(nodeCtx.(*bp.JumpStatementContext))
@@ -115,10 +116,11 @@ func (v *Visitor) VisitExpression(ctx *bp.ExpressionContext) value.Value {
 }
 
 // assignmentExpression
-//     :   logicalOrExpression
-//     |   unaryExpression assignmentOperator assignmentExpression
-//     |   DigitSequence // for
-//     ;
+//
+//	:   logicalOrExpression
+//	|   unaryExpression assignmentOperator assignmentExpression
+//	|   DigitSequence // for
+//	;
 func (v *Visitor) VisitAssignmentExpression(ctx *bp.AssignmentExpressionContext) value.Value {
 	if nodeCtx := ctx.LogicalOrExpression(); nodeCtx != nil {
 		return v.VisitLogicalOrExpression(nodeCtx.(*bp.LogicalOrExpressionContext))
@@ -252,10 +254,11 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 }
 
 // castExpression
-//     :   '(' typeName ')' castExpression
-//     |   postfixExpression
-//     |   DigitSequence // for
-//     ;
+//
+//	:   '(' typeName ')' castExpression
+//	|   postfixExpression
+//	|   DigitSequence // for
+//	;
 func (v *Visitor) VisitCastExpression(ctx *bp.CastExpressionContext) value.Value {
 	if nodeCtx := ctx.PostfixExpression(); nodeCtx != nil {
 		return v.VisitPostfixExpression(nodeCtx.(*bp.PostfixExpressionContext))
@@ -265,14 +268,15 @@ func (v *Visitor) VisitCastExpression(ctx *bp.CastExpressionContext) value.Value
 }
 
 // postfixExpression
-//     :
-//     (   primaryExpression
-//     |   '(' typeName ')' '{' initializerList ','? '}'
-//     )
-//     ('[' expression ']'
-//     | '(' argumentExpressionList? ')'
-//     )*
-//     ;
+//
+//	:
+//	(   primaryExpression
+//	|   '(' typeName ')' '{' initializerList ','? '}'
+//	)
+//	('[' expression ']'
+//	| '(' argumentExpressionList? ')'
+//	)*
+//	;
 func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value.Value {
 	var expr value.Value
 	if nodeCtx := ctx.PrimaryExpression(); nodeCtx != nil {
@@ -291,11 +295,12 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 }
 
 // primaryExpression
-//     :   Identifier
-//     |   Constant
-//     |   StringLiteral+
-//     |   '(' expression ')'
-//     ;
+//
+//	:   Identifier
+//	|   Constant
+//	|   StringLiteral+
+//	|   '(' expression ')'
+//	;
 func (v *Visitor) VisitPrimaryExpression(ctx *bp.PrimaryExpressionContext) value.Value {
 	if nodeCtx := ctx.Constant(); nodeCtx != nil {
 		val, err := strconv.Atoi(nodeCtx.GetText())
