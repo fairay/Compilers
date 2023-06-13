@@ -3,7 +3,7 @@ package ast
 import (
 	bp "course/compilers/parser" // baseparser
 
-	"github.com/llir/llvm/ir"
+	"github.com/llir/llvm/ir/constant"
 	"github.com/llir/llvm/ir/types"
 	"github.com/llir/llvm/ir/value"
 )
@@ -65,7 +65,9 @@ func (v *Visitor) VisitInitDeclaratorList(ctx *bp.InitDeclaratorListContext) int
 //	;
 func (v *Visitor) VisitInitDeclarator(ctx *bp.InitDeclaratorContext) interface{} {
 	declCtx := ctx.Declarator()
-	ptr := v.VisitDeclarator(declCtx.(*bp.DeclaratorContext))
+	t, name := v.VisitDeclarator(declCtx.(*bp.DeclaratorContext))
+	ptr := v.curBlock.NewAlloca(t)
+	ptr.SetName(name)
 	if nodeCtx := ctx.Initializer(); nodeCtx != nil {
 		init := v.VisitInitializer(nodeCtx.(*bp.InitializerContext))
 		v.curBlock.NewStore(init, ptr)
@@ -81,7 +83,7 @@ func (v *Visitor) VisitInitDeclarator(ctx *bp.InitDeclaratorContext) interface{}
 //	|   declarator '(' parameterTypeList ')'
 //	|   declarator '(' identifierList? ')'
 //	;
-func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) *ir.InstAlloca {
+func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) (types.Type, string) {
 	t := v.curDeclType
 	if nodeCtx := ctx.Identifier(); nodeCtx != nil {
 		name := ctx.GetText()
@@ -90,10 +92,18 @@ func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) *ir.InstAlloca {
 		if id != nil {
 			panic(AlreadyDefinedError(name))
 		}
+		return t, name
+	} else if exprCtx := ctx.AssignmentExpression(); exprCtx != nil {
+		declCtx := ctx.Declarator()
+		t, name := v.VisitDeclarator(declCtx.(*bp.DeclaratorContext))
+		expr := v.VisitAssignmentExpression(exprCtx.(*bp.AssignmentExpressionContext))
 
-		ptr := v.curBlock.NewAlloca(t)
-		ptr.SetName(name)
-		return ptr
+		size, ok := expr.(*constant.Int)
+		if !ok {
+			panic(VariableSizeError(exprCtx.GetText()))
+		}
+		t = types.NewArray(size.X.Uint64(), t)
+		return t, name
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}

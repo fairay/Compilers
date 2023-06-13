@@ -2,6 +2,8 @@ package ast
 
 import (
 	"fmt"
+
+	"github.com/llir/llvm/ir/value"
 )
 
 func UnimplementedError(ruleText string) error {
@@ -18,4 +20,12 @@ func UndefindedError(varName string) error {
 
 func AlreadyDefinedError(varName string) error {
 	return fmt.Errorf("variable is already definded: %s", varName)
+}
+
+func VariableSizeError(sizeExpr string) error {
+	return fmt.Errorf("can not use expression %s as size, it should be constant value", sizeExpr)
+}
+
+func ExpectedPtrError(v value.Value) error {
+	return fmt.Errorf("expected pointer, got %v", v)
 }

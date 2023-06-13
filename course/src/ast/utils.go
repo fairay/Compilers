@@ -18,14 +18,30 @@ func getVariableByName(block *ir.Block, name string) *ir.InstAlloca {
 	return nil
 }
 
-func (v *Visitor) sameT(expr, nextExpr value.Value) (value.Value, value.Value) {
+func toPtr(expr value.Value) *ir.InstAlloca {
 	if types.IsPointer(expr.Type()) {
-		ptr := expr.(*ir.InstAlloca)
-		expr = v.curBlock.NewLoad(ptr.ElemType, ptr)
+		return expr.(*ir.InstAlloca)
+	} else {
+		panic(ExpectedPtrError(expr))
 	}
-	if types.IsPointer(nextExpr.Type()) {
-		ptr := nextExpr.(*ir.InstAlloca)
-		nextExpr = v.curBlock.NewLoad(ptr.ElemType, ptr)
+}
+
+func (v *Visitor) dereference(expr value.Value) value.Value {
+	if !types.IsPointer(expr.Type()) {
+		return expr
 	}
-	return expr, nextExpr
+
+	if ptr, ok := expr.(*ir.InstAlloca); ok {
+		return v.curBlock.NewLoad(ptr.ElemType, ptr)
+	}
+	if ptr, ok := expr.(*ir.InstGetElementPtr); ok {
+		arrType := ptr.ElemType.(*types.ArrayType)
+		return v.curBlock.NewLoad(arrType.ElemType, ptr)
+	}
+	return expr
+}
+
+func (v *Visitor) sameT(expr, nextExpr value.Value) (value.Value, value.Value) {
+	// TODO: check size compatibility
+	return v.dereference(expr), v.dereference(nextExpr)
 }

@@ -1,11 +1,6 @@
-/* Hello World program */
-
 int main() {
     int arr[6];
-    int a = 10, b = 20;
-    int c = 30;
-    int d = 40;
-    int e = 50;
+    int a = 10, b = 20, c = 30, d = 40, e = 50;
     arr[0] = a + b;
     arr[1] = arr[0] * (c - d);
     arr[2] = arr[1] / (a * b);

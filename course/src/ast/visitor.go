@@ -103,10 +103,11 @@ func (v *Visitor) VisitExpressionStatement(ctx *bp.ExpressionStatementContext) i
 	return nil
 }
 
+// jumpStatement: 'return' expression ';' ;
 func (v *Visitor) VisitJumpStatement(ctx *bp.JumpStatementContext) interface{} {
 	expCtx := ctx.Expression()
 	retValue := v.VisitExpression(expCtx.(*bp.ExpressionContext))
-	v.curBlock.NewRet(retValue)
+	v.curBlock.NewRet(v.dereference(retValue))
 	return nil
 }
 
@@ -133,7 +134,7 @@ func (v *Visitor) VisitAssignmentExpression(ctx *bp.AssignmentExpressionContext)
 		postfixCtx := ctx.PostfixExpression()
 		postfix := v.VisitPostfixExpression(postfixCtx.(*bp.PostfixExpressionContext))
 		assigment := v.VisitAssignmentExpression(assigmentCtx.(*bp.AssignmentExpressionContext))
-		v.curBlock.NewStore(assigment, postfix)
+		v.curBlock.NewStore(v.dereference(assigment), postfix)
 		return assigment
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
@@ -295,11 +296,14 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 		panic(UnimplementedError(ctx.GetText()))
 	}
 
-	for range ctx.AllExpression() {
-		panic(UnimplementedError(ctx.GetText()))
-	}
 	for range ctx.AllArgumentExpressionList() {
 		panic(UnimplementedError(ctx.GetText()))
+	}
+
+	for _, nodeCtx := range ctx.AllExpression() {
+		idx := v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
+		arrPtr := toPtr(expr)
+		expr = v.curBlock.NewGetElementPtr(arrPtr.ElemType, arrPtr, constant.NewInt(types.I64, 0), v.dereference(idx))
 	}
 	return expr
 }
