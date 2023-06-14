@@ -62,22 +62,22 @@ func testCompileAndCompare(t *testing.T, file string, dir string) {
 	}
 }
 
-func myCompile(config *utils.CompileConfigT) error {
-	defer func() error {
+func myCompile(config *utils.CompileConfigT) (err error) {
+	defer func() {
 		r := recover()
 		if r == nil {
-			return nil
+			return
 		}
 
-		err, ok := r.(error)
+		var ok bool
+		err, ok = r.(error)
 		if !ok {
 			err = fmt.Errorf("myCompile panic cast error, recover %v", r)
 		}
-		return err
 	}()
 
 	compiler.Compile(config)
-	return nil
+	return err
 }
 
 func gccCompile(srcFile, executableFile string) error {

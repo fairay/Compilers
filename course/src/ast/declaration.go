@@ -66,11 +66,10 @@ func (v *Visitor) VisitInitDeclaratorList(ctx *bp.InitDeclaratorListContext) int
 func (v *Visitor) VisitInitDeclarator(ctx *bp.InitDeclaratorContext) interface{} {
 	declCtx := ctx.Declarator()
 	t, name := v.VisitDeclarator(declCtx.(*bp.DeclaratorContext))
-	ptr := v.curBlock.NewAlloca(t)
-	ptr.SetName(name)
+	ptr := v.newVariable(t, name)
 	if nodeCtx := ctx.Initializer(); nodeCtx != nil {
 		init := v.VisitInitializer(nodeCtx.(*bp.InitializerContext))
-		v.curBlock.NewStore(init, ptr)
+		v.block().NewStore(init, ptr)
 	}
 	return nil
 }
@@ -87,11 +86,6 @@ func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) (types.Type, string
 	t := v.curDeclType
 	if nodeCtx := ctx.Identifier(); nodeCtx != nil {
 		name := ctx.GetText()
-
-		id := getVariableByName(v.curBlock, name)
-		if id != nil {
-			panic(AlreadyDefinedError(name))
-		}
 		return t, name
 	} else if exprCtx := ctx.AssignmentExpression(); exprCtx != nil {
 		declCtx := ctx.Declarator()

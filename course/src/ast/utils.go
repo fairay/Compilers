@@ -6,13 +6,59 @@ import (
 	"github.com/llir/llvm/ir/value"
 )
 
-func getVariableByName(block *ir.Block, name string) *ir.InstAlloca {
-	for _, inst := range block.Insts {
-		if inst, ok := inst.(*ir.InstAlloca); ok {
-			varName := inst.LocalName
-			if varName == name {
-				return inst
-			}
+func (v *Visitor) block() *ir.Block {
+	return v.blocks[len(v.blocks)-1]
+}
+
+func (v *Visitor) pushBlock(block *ir.Block) {
+	if len(v.blocks) == 0 {
+		v.mainBlock = block
+	} else {
+		endWithBr(block, v.block())
+	}
+	v.blocks = append(v.blocks, block)
+}
+
+func (v *Visitor) popBlock(block *ir.Block) {
+	v.blocks = v.blocks[:len(v.blocks)-1]
+	if len(v.blocks) == 0 {
+		v.mainBlock = nil
+	}
+}
+
+func (v *Visitor) replaceBlock(block *ir.Block) {
+	if len(v.blocks) >= 2 {
+		endWithBr(block, v.blocks[len(v.blocks)-2])
+	}
+	v.blocks[len(v.blocks)-1] = block
+}
+
+func (v *Visitor) pushScope() {
+	v.varScopes = append(v.varScopes, VarScope{})
+}
+func (v *Visitor) popScope() {
+	v.varScopes = v.varScopes[:len(v.varScopes)-1]
+}
+
+func (v *Visitor) newVariable(t types.Type, name string) *ir.InstAlloca {
+	defindedVar := v.variable(name)
+	if defindedVar != nil {
+		panic(AlreadyDefinedError(name))
+	}
+
+	ptr := v.mainBlock.NewAlloca(t)
+
+	// assing new variable to current variable scope
+	v.varScopes[len(v.varScopes)-1][name] = ptr
+
+	return ptr
+}
+
+func (v *Visitor) variable(name string) *ir.InstAlloca {
+	for i := len(v.varScopes) - 1; i >= 0; i = i - 1 {
+		scope := v.varScopes[i]
+		if variable, ok := scope[name]; ok {
+			return variable
 		}
 	}
 	return nil
@@ -32,11 +78,11 @@ func (v *Visitor) dereference(expr value.Value) value.Value {
 	}
 
 	if ptr, ok := expr.(*ir.InstAlloca); ok {
-		return v.curBlock.NewLoad(ptr.ElemType, ptr)
+		return v.block().NewLoad(ptr.ElemType, ptr)
 	}
 	if ptr, ok := expr.(*ir.InstGetElementPtr); ok {
 		arrType := ptr.ElemType.(*types.ArrayType)
-		return v.curBlock.NewLoad(arrType.ElemType, ptr)
+		return v.block().NewLoad(arrType.ElemType, ptr)
 	}
 	return expr
 }
@@ -44,4 +90,10 @@ func (v *Visitor) dereference(expr value.Value) value.Value {
 func (v *Visitor) sameT(expr, nextExpr value.Value) (value.Value, value.Value) {
 	// TODO: check size compatibility
 	return v.dereference(expr), v.dereference(nextExpr)
+}
+
+func endWithBr(block, nextBlock *ir.Block) {
+	if block.Term == nil {
+		block.NewBr(nextBlock)
+	}
 }

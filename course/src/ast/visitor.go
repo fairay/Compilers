@@ -2,6 +2,7 @@ package ast
 
 import (
 	bp "course/compilers/parser" // baseparser
+	"fmt"
 	"strconv"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -12,11 +13,15 @@ import (
 	"github.com/llir/llvm/ir/value"
 )
 
+type VarScope map[string]*ir.InstAlloca
+
 type Visitor struct {
 	bp.BasetinycVisitor
 
 	Module      *ir.Module
-	curBlock    *ir.Block
+	mainBlock	*ir.Block
+	blocks      []*ir.Block
+	varScopes   []VarScope
 	curDeclType types.Type
 }
 
@@ -24,7 +29,60 @@ func NewVisitor() *Visitor {
 	return &Visitor{}
 }
 
+func testModule() {
+	// Создаем модуль
+	module := ir.NewModule()
+
+	// Добавляем функцию main без параметров и возвращаемого значения
+	mainFunc := module.NewFunc("main", types.I32, ir.NewParam("", types.Void))
+	block := mainFunc.NewBlock("")
+
+	// Создаем переменную a и присваиваем ей значение 0
+	a := block.NewAlloca(types.I32)
+	block.NewStore(constant.NewInt(types.I32, 0), a)
+
+	// Создаем условие 1 == 2
+	cmp := block.NewICmp(enum.IPredEQ, constant.NewInt(types.I32, 1), constant.NewInt(types.I32, 2))
+
+	// Создаем блоки ifTrue и ifFalse
+	ifTrue := mainFunc.NewBlock("if_true")
+	ifFalse := mainFunc.NewBlock("if_false")
+	nextBlock := mainFunc.NewBlock("next")
+
+	// Создаем условный переход
+	block.NewCondBr(cmp, ifTrue, ifFalse)
+
+	// В блоке ifTrue увеличиваем a на 1
+	ifTrue.NewStore(ifTrue.NewAdd(ifTrue.NewLoad(types.I32, a), constant.NewInt(types.I32, 1)), a)
+	ifTrue.NewBr(nextBlock)
+
+	// В блоке ifFalse просто переходим к следующей инструкции
+	ifFalse.NewBr(nextBlock)
+
+	// Продолжаем в следующем блоке
+	nextBlock.NewStore(nextBlock.NewSDiv(nextBlock.NewLoad(types.I32, a), constant.NewInt(types.I32, 2)), a)
+	nextBlock.NewStore(nextBlock.NewSub(nextBlock.NewLoad(types.I32, a), constant.NewInt(types.I32, 1)), a)
+	nextBlock.NewRet(nextBlock.NewLoad(types.I32, a))
+
+	// Выводим LLVM IR на экран
+	fmt.Println(module)
+
+	// Компилируем и выполняем модуль
+	// engine, err := ir.NewJITCompiler(module)
+	// if err != nil {
+	// 	fmt.Println("Failed to create JIT compiler:", err)
+	// 	return
+	// }
+	// result, err := engine.RunFunc(mainFunc, nil)
+	// if err != nil {
+	// 	fmt.Println("Failed to run main function:", err)
+	// 	return
+	// }
+	// fmt.Println("Result:", result.Int())
+}
+
 func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
+	// testModule()
 	v.Module = ir.NewModule()
 
 	for _, decl := range ctx.AllExternalDeclaration() {
@@ -48,23 +106,22 @@ func (v *Visitor) VisitFunctionDefinition(ctx *bp.FunctionDefinitionContext) int
 	params := make([]*ir.Param, 0) // TODO: VisitDeclarationList
 	function := v.Module.NewFunc(name, retType, params...)
 
+	block := function.NewBlock("main")
+	v.pushBlock(block)
 	compoundStatement := ctx.CompoundStatement()
-	block := v.VisitCompoundStatement(compoundStatement.(*bp.CompoundStatementContext))
-	function.Blocks = append(function.Blocks, block)
+	v.VisitCompoundStatement(compoundStatement.(*bp.CompoundStatementContext))
+	v.popBlock(block)
 
 	return nil
 }
 
-func (v *Visitor) VisitCompoundStatement(ctx *bp.CompoundStatementContext) *ir.Block {
-	block := ir.NewBlock("")
-
-	v.curBlock = block
+func (v *Visitor) VisitCompoundStatement(ctx *bp.CompoundStatementContext) interface{} {
+	v.pushScope()
 	for _, nodeCtx := range ctx.AllBlockItem() {
 		v.VisitBlockItem(nodeCtx.(*bp.BlockItemContext))
 	}
-	v.curBlock = nil
-
-	return block
+	v.popScope()
+	return nil
 }
 
 func (v *Visitor) VisitBlockItem(ctx *bp.BlockItemContext) interface{} {
@@ -90,9 +147,50 @@ func (v *Visitor) VisitStatement(ctx *bp.StatementContext) interface{} {
 		v.VisitJumpStatement(nodeCtx.(*bp.JumpStatementContext))
 	} else if nodeCtx := ctx.ExpressionStatement(); nodeCtx != nil {
 		v.VisitExpressionStatement(nodeCtx.(*bp.ExpressionStatementContext))
+	} else if nodeCtx := ctx.SelectionStatement(); nodeCtx != nil {
+		v.VisitSelectionStatement(nodeCtx.(*bp.SelectionStatementContext))
+	} else if nodeCtx := ctx.CompoundStatement(); nodeCtx != nil {
+		v.VisitCompoundStatement(nodeCtx.(*bp.CompoundStatementContext))
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
+	return nil
+}
+
+// selectionStatement
+//
+//	:   'if' '(' expression ')' statement ('else' statement)?
+//	;
+func (v *Visitor) VisitSelectionStatement(ctx *bp.SelectionStatementContext) interface{} {
+	exprCtx := ctx.Expression()
+	cond := v.VisitExpression(exprCtx.(*bp.ExpressionContext))
+
+	blockNum := len(v.block().Parent.Blocks)
+	ifBlock := v.block().Parent.NewBlock(fmt.Sprintf("if-%d", blockNum))
+	elseBlock := v.block().Parent.NewBlock(fmt.Sprintf("else-%d", blockNum))
+	nextBlock := v.block().Parent.NewBlock(fmt.Sprintf("main-%d", blockNum))
+	
+	v.block().NewCondBr(cond, ifBlock, elseBlock)
+	v.replaceBlock(nextBlock)
+	ifBlock.NewBr(nextBlock)
+	elseBlock.NewBr(nextBlock)
+
+	{
+		// if
+		v.pushBlock(ifBlock)
+		stCtx := ctx.AllStatement()[0]
+		v.VisitStatement(stCtx.(*bp.StatementContext))
+		v.popBlock(ifBlock)
+	}
+	
+	if len(ctx.AllStatement()) > 1 {
+		// else (optional)
+		v.pushBlock(elseBlock)
+		stCtx := ctx.AllStatement()[1]
+		v.VisitStatement(stCtx.(*bp.StatementContext))
+		v.popBlock(elseBlock)
+	}
+
 	return nil
 }
 
@@ -107,7 +205,7 @@ func (v *Visitor) VisitExpressionStatement(ctx *bp.ExpressionStatementContext) i
 func (v *Visitor) VisitJumpStatement(ctx *bp.JumpStatementContext) interface{} {
 	expCtx := ctx.Expression()
 	retValue := v.VisitExpression(expCtx.(*bp.ExpressionContext))
-	v.curBlock.NewRet(v.dereference(retValue))
+	v.block().NewRet(v.dereference(retValue))
 	return nil
 }
 
@@ -134,7 +232,7 @@ func (v *Visitor) VisitAssignmentExpression(ctx *bp.AssignmentExpressionContext)
 		postfixCtx := ctx.PostfixExpression()
 		postfix := v.VisitPostfixExpression(postfixCtx.(*bp.PostfixExpressionContext))
 		assigment := v.VisitAssignmentExpression(assigmentCtx.(*bp.AssignmentExpressionContext))
-		v.curBlock.NewStore(v.dereference(assigment), postfix)
+		v.block().NewStore(v.dereference(assigment), postfix)
 		return assigment
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
@@ -148,7 +246,7 @@ func (v *Visitor) VisitLogicalOrExpression(ctx *bp.LogicalOrExpressionContext) v
 		if index == 0 {
 			expr = nextExpr
 		} else {
-			expr = v.curBlock.NewOr(expr, nextExpr)
+			expr = v.block().NewOr(expr, nextExpr)
 		}
 	}
 	return expr
@@ -161,7 +259,7 @@ func (v *Visitor) VisitLogicalAndExpression(ctx *bp.LogicalAndExpressionContext)
 		if index == 0 {
 			expr = nextExpr
 		} else {
-			expr = v.curBlock.NewAnd(expr, nextExpr)
+			expr = v.block().NewAnd(expr, nextExpr)
 		}
 	}
 	return expr
@@ -184,7 +282,7 @@ func (v *Visitor) VisitEqualityExpression(ctx *bp.EqualityExpressionContext) val
 			expr = v.VisitRelationalExpression(nodeCtx.(*bp.RelationalExpressionContext))
 		} else {
 			nextExpr := v.VisitRelationalExpression(nodeCtx.(*bp.RelationalExpressionContext))
-			expr = v.curBlock.NewICmp(pred, expr, nextExpr)
+			expr = v.block().NewICmp(pred, v.dereference(expr), v.dereference(nextExpr))
 		}
 	}
 	return expr
@@ -211,7 +309,7 @@ func (v *Visitor) VisitRelationalExpression(ctx *bp.RelationalExpressionContext)
 			expr = v.VisitAdditiveExpression(nodeCtx.(*bp.AdditiveExpressionContext))
 		} else {
 			nextExpr := v.VisitAdditiveExpression(nodeCtx.(*bp.AdditiveExpressionContext))
-			expr = v.curBlock.NewICmp(pred, expr, nextExpr)
+			expr = v.block().NewICmp(pred, v.dereference(expr), v.dereference(nextExpr))
 		}
 	}
 	return expr
@@ -231,9 +329,9 @@ func (v *Visitor) VisitAdditiveExpression(ctx *bp.AdditiveExpressionContext) val
 			nextExpr := v.VisitMultiplicativeExpression(nodeCtx.(*bp.MultiplicativeExpressionContext))
 			switch operation {
 			case "+":
-				expr = v.curBlock.NewAdd(v.sameT(expr, nextExpr))
+				expr = v.block().NewAdd(v.sameT(expr, nextExpr))
 			case "-":
-				expr = v.curBlock.NewSub(v.sameT(expr, nextExpr))
+				expr = v.block().NewSub(v.sameT(expr, nextExpr))
 			}
 		}
 	}
@@ -254,11 +352,11 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 			nextExpr := v.VisitCastExpression(nodeCtx.(*bp.CastExpressionContext))
 			switch operation {
 			case "*":
-				expr = v.curBlock.NewMul(v.sameT(expr, nextExpr))
+				expr = v.block().NewMul(v.sameT(expr, nextExpr))
 			case "/":
-				expr = v.curBlock.NewSDiv(v.sameT(expr, nextExpr))
+				expr = v.block().NewSDiv(v.sameT(expr, nextExpr))
 			case "%":
-				expr = v.curBlock.NewSRem(v.sameT(expr, nextExpr))
+				expr = v.block().NewSRem(v.sameT(expr, nextExpr))
 			}
 		}
 	}
@@ -303,7 +401,7 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 	for _, nodeCtx := range ctx.AllExpression() {
 		idx := v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
 		arrPtr := toPtr(expr)
-		expr = v.curBlock.NewGetElementPtr(arrPtr.ElemType, arrPtr, constant.NewInt(types.I64, 0), v.dereference(idx))
+		expr = v.block().NewGetElementPtr(arrPtr.ElemType, arrPtr, constant.NewInt(types.I64, 0), v.dereference(idx))
 	}
 	return expr
 }
@@ -326,7 +424,7 @@ func (v *Visitor) VisitPrimaryExpression(ctx *bp.PrimaryExpressionContext) value
 		return v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
 	} else if nodeCtx := ctx.Identifier(); nodeCtx != nil {
 		name := ctx.GetText()
-		id := getVariableByName(v.curBlock, name)
+		id := v.variable(name)
 		if id == nil {
 			panic(UndefindedError(name))
 		}

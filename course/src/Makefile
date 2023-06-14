@@ -9,10 +9,10 @@ output.ll:
 	go run .
 
 output.obj:
-	clang -c -o $(buildDir)/output.obj $(buildDir)/output.ll
+	clang -c -o $(buildDir)/output.obj $(buildDir)/output.ll -fno-stack-protector -target x86_64-pc-windows-msvc
 
 output.exe: output.obj
-	lld-link /subsystem:console /out:$(buildDir)/output.exe $(buildDir)/output.obj
+	lld-link /subsystem:console /ENTRY:main /out:$(buildDir)/output.exe $(buildDir)/output.obj
 
 generate:
 	go generate ./...
