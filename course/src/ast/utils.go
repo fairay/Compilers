@@ -2,6 +2,8 @@ package ast
 
 import (
 	"github.com/llir/llvm/ir"
+	"github.com/llir/llvm/ir/constant"
+	"github.com/llir/llvm/ir/enum"
 	"github.com/llir/llvm/ir/types"
 	"github.com/llir/llvm/ir/value"
 )
@@ -26,11 +28,20 @@ func (v *Visitor) popBlock(block *ir.Block) {
 	}
 }
 
-func (v *Visitor) replaceBlock(block *ir.Block) {
-	if len(v.blocks) >= 2 {
-		endWithBr(block, v.blocks[len(v.blocks)-2])
+// returns replaced block
+func (v *Visitor) replaceBlock(block *ir.Block) *ir.Block {
+	curBlock := v.block()
+	if brTerm, ok := curBlock.Term.(*ir.TermBr); ok {
+		block.NewBr(brTerm.Succs()[0])
 	}
 	v.blocks[len(v.blocks)-1] = block
+	return curBlock
+}
+
+func endWithBr(block, nextBlock *ir.Block) {
+	if block.Term == nil {
+		block.NewBr(nextBlock)
+	}
 }
 
 func (v *Visitor) pushScope() {
@@ -92,8 +103,16 @@ func (v *Visitor) sameT(expr, nextExpr value.Value) (value.Value, value.Value) {
 	return v.dereference(expr), v.dereference(nextExpr)
 }
 
-func endWithBr(block, nextBlock *ir.Block) {
-	if block.Term == nil {
-		block.NewBr(nextBlock)
+func (v *Visitor) castCond(cond value.Value) value.Value {
+	cond = v.dereference(cond)
+
+	if cond.Type().Equal(types.I1) {
+		return cond
 	}
+
+	if cond.Type().Equal(types.I32) {
+		return v.block().NewICmp(enum.IPredNE, cond, constant.NewInt(types.I32, 0))
+	}
+
+	panic(BadCondition(cond))
 }

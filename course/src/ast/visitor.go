@@ -19,7 +19,7 @@ type Visitor struct {
 	bp.BasetinycVisitor
 
 	Module      *ir.Module
-	mainBlock	*ir.Block
+	mainBlock   *ir.Block
 	blocks      []*ir.Block
 	varScopes   []VarScope
 	curDeclType types.Type
@@ -30,55 +30,59 @@ func NewVisitor() *Visitor {
 }
 
 func testModule() {
-	// Создаем модуль
+	// Create a new LLVM IR module.
 	module := ir.NewModule()
 
-	// Добавляем функцию main без параметров и возвращаемого значения
-	mainFunc := module.NewFunc("main", types.I32, ir.NewParam("", types.Void))
-	block := mainFunc.NewBlock("")
+	// Create the main function.
+	mainFunc := module.NewFunc("main", types.I32)
+	block := mainFunc.NewBlock("entry")
 
-	// Создаем переменную a и присваиваем ей значение 0
+	// Allocate memory for variable 'a'.
 	a := block.NewAlloca(types.I32)
-	block.NewStore(constant.NewInt(types.I32, 0), a)
 
-	// Создаем условие 1 == 2
-	cmp := block.NewICmp(enum.IPredEQ, constant.NewInt(types.I32, 1), constant.NewInt(types.I32, 2))
+	// Initialize 'a' with value 2.
+	block.NewStore(constant.NewInt(types.I32, 2), a)
 
-	// Создаем блоки ifTrue и ifFalse
-	ifTrue := mainFunc.NewBlock("if_true")
-	ifFalse := mainFunc.NewBlock("if_false")
-	nextBlock := mainFunc.NewBlock("next")
+	// Create the loop condition block.
+	loopCondBlock := mainFunc.NewBlock("loop.cond")
+	loopBodyBlock := mainFunc.NewBlock("loop.body")
+	loopExitBlock := mainFunc.NewBlock("loop.exit")
 
-	// Создаем условный переход
-	block.NewCondBr(cmp, ifTrue, ifFalse)
+	// Branch from entry block to loop condition block.
+	block.NewBr(loopCondBlock)
 
-	// В блоке ifTrue увеличиваем a на 1
-	ifTrue.NewStore(ifTrue.NewAdd(ifTrue.NewLoad(types.I32, a), constant.NewInt(types.I32, 1)), a)
-	ifTrue.NewBr(nextBlock)
+	// Loop condition block.
+	loopCondBlock.NewBr(loopCondBlock) // Infinite loop until break condition.
 
-	// В блоке ifFalse просто переходим к следующей инструкции
-	ifFalse.NewBr(nextBlock)
+	// Load the current value of 'a'.
+	current := loopCondBlock.NewLoad(types.I32, a)
 
-	// Продолжаем в следующем блоке
-	nextBlock.NewStore(nextBlock.NewSDiv(nextBlock.NewLoad(types.I32, a), constant.NewInt(types.I32, 2)), a)
-	nextBlock.NewStore(nextBlock.NewSub(nextBlock.NewLoad(types.I32, a), constant.NewInt(types.I32, 1)), a)
-	nextBlock.NewRet(nextBlock.NewLoad(types.I32, a))
+	// Compare 'current' with 10.
+	cmp := loopCondBlock.NewICmp(enum.IPredSLT, current, constant.NewInt(types.I32, 10))
 
-	// Выводим LLVM IR на экран
+	// Branch to either loop body or loop exit based on the comparison result.
+	loopCondBlock.NewCondBr(cmp, loopBodyBlock, loopExitBlock)
+
+	// Loop body block.
+	loopBodyBlock.NewBr(loopCondBlock) // Jump back to loop condition block.
+
+	// Multiply 'current' by 2.
+	mul := loopBodyBlock.NewMul(current, constant.NewInt(types.I32, 2))
+
+	// Store the updated value back to 'a'.
+	loopBodyBlock.NewStore(mul, a)
+
+	// Branch back to loop condition block.
+	loopBodyBlock.NewBr(loopCondBlock)
+
+	// Loop exit block.
+	exitValue := loopExitBlock.NewLoad(types.I32, a)
+
+	// Return the final value of 'a'.
+	loopExitBlock.NewRet(exitValue)
+
+	// Print the LLVM IR assembly code.
 	fmt.Println(module)
-
-	// Компилируем и выполняем модуль
-	// engine, err := ir.NewJITCompiler(module)
-	// if err != nil {
-	// 	fmt.Println("Failed to create JIT compiler:", err)
-	// 	return
-	// }
-	// result, err := engine.RunFunc(mainFunc, nil)
-	// if err != nil {
-	// 	fmt.Println("Failed to run main function:", err)
-	// 	return
-	// }
-	// fmt.Println("Result:", result.Int())
 }
 
 func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
@@ -151,6 +155,8 @@ func (v *Visitor) VisitStatement(ctx *bp.StatementContext) interface{} {
 		v.VisitSelectionStatement(nodeCtx.(*bp.SelectionStatementContext))
 	} else if nodeCtx := ctx.CompoundStatement(); nodeCtx != nil {
 		v.VisitCompoundStatement(nodeCtx.(*bp.CompoundStatementContext))
+	} else if nodeCtx := ctx.IterationStatement(); nodeCtx != nil {
+		v.VisitIterationStatement(nodeCtx.(*bp.IterationStatementContext))
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
@@ -169,9 +175,9 @@ func (v *Visitor) VisitSelectionStatement(ctx *bp.SelectionStatementContext) int
 	ifBlock := v.block().Parent.NewBlock(fmt.Sprintf("if-%d", blockNum))
 	elseBlock := v.block().Parent.NewBlock(fmt.Sprintf("else-%d", blockNum))
 	nextBlock := v.block().Parent.NewBlock(fmt.Sprintf("main-%d", blockNum))
-	
-	v.block().NewCondBr(cond, ifBlock, elseBlock)
-	v.replaceBlock(nextBlock)
+
+	preBlock := v.replaceBlock(nextBlock)
+	preBlock.NewCondBr(v.castCond(cond), ifBlock, elseBlock)
 	ifBlock.NewBr(nextBlock)
 	elseBlock.NewBr(nextBlock)
 
@@ -182,7 +188,7 @@ func (v *Visitor) VisitSelectionStatement(ctx *bp.SelectionStatementContext) int
 		v.VisitStatement(stCtx.(*bp.StatementContext))
 		v.popBlock(ifBlock)
 	}
-	
+
 	if len(ctx.AllStatement()) > 1 {
 		// else (optional)
 		v.pushBlock(elseBlock)
@@ -191,6 +197,40 @@ func (v *Visitor) VisitSelectionStatement(ctx *bp.SelectionStatementContext) int
 		v.popBlock(elseBlock)
 	}
 
+	return nil
+}
+
+// iterationStatement
+//
+//	:   While '(' expression ')' statement
+//	;
+func (v *Visitor) VisitIterationStatement(ctx *bp.IterationStatementContext) interface{} {
+
+	blockNum := len(v.block().Parent.Blocks)
+	condBlock := v.block().Parent.NewBlock(fmt.Sprintf("while.cond-%d", blockNum))
+	bodyBlock := v.block().Parent.NewBlock(fmt.Sprintf("while.body-%d", blockNum))
+	nextBlock := v.block().Parent.NewBlock(fmt.Sprintf("main-%d", blockNum))
+
+	preBlock := v.replaceBlock(nextBlock)
+	preBlock.NewBr(condBlock)
+	bodyBlock.NewBr(condBlock)
+
+	{
+		// condition
+		v.pushBlock(condBlock)
+		exprCtx := ctx.Expression()
+		cond := v.VisitExpression(exprCtx.(*bp.ExpressionContext))
+		condBlock.NewCondBr(v.castCond(cond), bodyBlock, nextBlock)
+		v.popBlock(condBlock)
+	}
+
+	{
+		// statement
+		v.pushBlock(bodyBlock)
+		stCtx := ctx.Statement()
+		v.VisitStatement(stCtx.(*bp.StatementContext))
+		v.popBlock(bodyBlock)
+	}
 	return nil
 }
 

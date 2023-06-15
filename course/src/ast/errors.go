@@ -29,3 +29,7 @@ func VariableSizeError(sizeExpr string) error {
 func ExpectedPtrError(v value.Value) error {
 	return fmt.Errorf("expected pointer, got %v", v)
 }
+
+func BadCondition(v value.Value) error {
+	return fmt.Errorf("cannot use %v as a condition", v)
+}

@@ -1,6 +1,3 @@
-/* Hello World program */
-
-
 int main() {
     int number = 100;
     int count = 0;
