@@ -22,6 +22,12 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#argumentExpressionList.
 	VisitArgumentExpressionList(ctx *ArgumentExpressionListContext) interface{}
 
+	// Visit a parse tree produced by tinycParser#unaryExpression.
+	VisitUnaryExpression(ctx *UnaryExpressionContext) interface{}
+
+	// Visit a parse tree produced by tinycParser#unaryOperator.
+	VisitUnaryOperator(ctx *UnaryOperatorContext) interface{}
+
 	// Visit a parse tree produced by tinycParser#castExpression.
 	VisitCastExpression(ctx *CastExpressionContext) interface{}
 

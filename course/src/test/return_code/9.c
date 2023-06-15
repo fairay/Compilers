@@ -11,7 +11,7 @@ int main() {
             result = c;
         }
     } else {
-        if (b > c) {
+        if (!(b < c)) {
             result = b;
         } else {
             result = c;

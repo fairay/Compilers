@@ -27,6 +27,14 @@ func (v *BasetinycVisitor) VisitArgumentExpressionList(ctx *ArgumentExpressionLi
 	return v.VisitChildren(ctx)
 }
 
+func (v *BasetinycVisitor) VisitUnaryExpression(ctx *UnaryExpressionContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BasetinycVisitor) VisitUnaryOperator(ctx *UnaryOperatorContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BasetinycVisitor) VisitCastExpression(ctx *CastExpressionContext) interface{} {
 	return v.VisitChildren(ctx)
 }

@@ -59,9 +59,18 @@ argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
+unaryExpression: unaryOperator castExpression;
+
+unaryOperator
+    :   
+    '+' | '-' | '!'
+    // | '&' | '*' | '~'
+    ;
+
 castExpression
     :   '(' typeName ')' castExpression
     |   postfixExpression
+    |   unaryExpression
     ;
 
 multiplicativeExpression

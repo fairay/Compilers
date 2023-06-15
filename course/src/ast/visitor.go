@@ -404,16 +404,39 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 }
 
 // castExpression
-//
-//	:   '(' typeName ')' castExpression
-//	|   postfixExpression
-//	;
+//     :   '(' typeName ')' castExpression
+//     |   postfixExpression
+//     |   unaryExpression
+//     ;
 func (v *Visitor) VisitCastExpression(ctx *bp.CastExpressionContext) value.Value {
 	if nodeCtx := ctx.PostfixExpression(); nodeCtx != nil {
 		return v.VisitPostfixExpression(nodeCtx.(*bp.PostfixExpressionContext))
+	} else if nodeCtx := ctx.UnaryExpression(); nodeCtx != nil {
+		return v.VisitUnaryExpression(nodeCtx.(*bp.UnaryExpressionContext))
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
+}
+
+// unaryExpression: unaryOperator castExpression;
+func (v *Visitor) VisitUnaryExpression(ctx *bp.UnaryExpressionContext) value.Value {
+	exprCtx := ctx.CastExpression()
+	value := v.VisitCastExpression(exprCtx.(*bp.CastExpressionContext))
+
+	switch ctx.UnaryOperator().GetText() {
+	case "-":
+		value = v.block().NewSub(constant.NewInt(types.I32, 0), value)
+		// TODO: support float
+	case "!":
+		value = v.block().NewICmp(
+			enum.IPredEQ,
+			constant.False,
+			v.castCond(value),
+		)
+	case "+":
+		// pass			
+	}
+	return value
 }
 
 // postfixExpression

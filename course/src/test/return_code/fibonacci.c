@@ -2,7 +2,6 @@ int main() {
     int n = 10;
 
     if (n > 100) {
-        // TODO: fix -1
         return -1;
     }
 

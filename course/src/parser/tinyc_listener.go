@@ -22,6 +22,12 @@ type tinycListener interface {
 	// EnterArgumentExpressionList is called when entering the argumentExpressionList production.
 	EnterArgumentExpressionList(c *ArgumentExpressionListContext)
 
+	// EnterUnaryExpression is called when entering the unaryExpression production.
+	EnterUnaryExpression(c *UnaryExpressionContext)
+
+	// EnterUnaryOperator is called when entering the unaryOperator production.
+	EnterUnaryOperator(c *UnaryOperatorContext)
+
 	// EnterCastExpression is called when entering the castExpression production.
 	EnterCastExpression(c *CastExpressionContext)
 
@@ -168,6 +174,12 @@ type tinycListener interface {
 
 	// ExitArgumentExpressionList is called when exiting the argumentExpressionList production.
 	ExitArgumentExpressionList(c *ArgumentExpressionListContext)
+
+	// ExitUnaryExpression is called when exiting the unaryExpression production.
+	ExitUnaryExpression(c *UnaryExpressionContext)
+
+	// ExitUnaryOperator is called when exiting the unaryOperator production.
+	ExitUnaryOperator(c *UnaryOperatorContext)
 
 	// ExitCastExpression is called when exiting the castExpression production.
 	ExitCastExpression(c *CastExpressionContext)

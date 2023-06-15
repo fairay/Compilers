@@ -50,6 +50,18 @@ func (s *BasetinycListener) EnterArgumentExpressionList(ctx *ArgumentExpressionL
 // ExitArgumentExpressionList is called when production argumentExpressionList is exited.
 func (s *BasetinycListener) ExitArgumentExpressionList(ctx *ArgumentExpressionListContext) {}
 
+// EnterUnaryExpression is called when production unaryExpression is entered.
+func (s *BasetinycListener) EnterUnaryExpression(ctx *UnaryExpressionContext) {}
+
+// ExitUnaryExpression is called when production unaryExpression is exited.
+func (s *BasetinycListener) ExitUnaryExpression(ctx *UnaryExpressionContext) {}
+
+// EnterUnaryOperator is called when production unaryOperator is entered.
+func (s *BasetinycListener) EnterUnaryOperator(ctx *UnaryOperatorContext) {}
+
+// ExitUnaryOperator is called when production unaryOperator is exited.
+func (s *BasetinycListener) ExitUnaryOperator(ctx *UnaryOperatorContext) {}
+
 // EnterCastExpression is called when production castExpression is entered.
 func (s *BasetinycListener) EnterCastExpression(ctx *CastExpressionContext) {}
 
