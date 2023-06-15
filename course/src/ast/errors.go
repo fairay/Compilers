@@ -33,3 +33,7 @@ func ExpectedPtrError(v value.Value) error {
 func BadCondition(v value.Value) error {
 	return fmt.Errorf("cannot use %v as a condition", v)
 }
+
+func NotSubscriptable(v value.Value) error {
+	return fmt.Errorf("%v not subscriptable", v)
+}

@@ -29,64 +29,7 @@ func NewVisitor() *Visitor {
 	return &Visitor{}
 }
 
-func testModule() {
-	// Create a new LLVM IR module.
-	module := ir.NewModule()
-
-	// Create the main function.
-	mainFunc := module.NewFunc("main", types.I32)
-	block := mainFunc.NewBlock("entry")
-
-	// Allocate memory for variable 'a'.
-	a := block.NewAlloca(types.I32)
-
-	// Initialize 'a' with value 2.
-	block.NewStore(constant.NewInt(types.I32, 2), a)
-
-	// Create the loop condition block.
-	loopCondBlock := mainFunc.NewBlock("loop.cond")
-	loopBodyBlock := mainFunc.NewBlock("loop.body")
-	loopExitBlock := mainFunc.NewBlock("loop.exit")
-
-	// Branch from entry block to loop condition block.
-	block.NewBr(loopCondBlock)
-
-	// Loop condition block.
-	loopCondBlock.NewBr(loopCondBlock) // Infinite loop until break condition.
-
-	// Load the current value of 'a'.
-	current := loopCondBlock.NewLoad(types.I32, a)
-
-	// Compare 'current' with 10.
-	cmp := loopCondBlock.NewICmp(enum.IPredSLT, current, constant.NewInt(types.I32, 10))
-
-	// Branch to either loop body or loop exit based on the comparison result.
-	loopCondBlock.NewCondBr(cmp, loopBodyBlock, loopExitBlock)
-
-	// Loop body block.
-	loopBodyBlock.NewBr(loopCondBlock) // Jump back to loop condition block.
-
-	// Multiply 'current' by 2.
-	mul := loopBodyBlock.NewMul(current, constant.NewInt(types.I32, 2))
-
-	// Store the updated value back to 'a'.
-	loopBodyBlock.NewStore(mul, a)
-
-	// Branch back to loop condition block.
-	loopBodyBlock.NewBr(loopCondBlock)
-
-	// Loop exit block.
-	exitValue := loopExitBlock.NewLoad(types.I32, a)
-
-	// Return the final value of 'a'.
-	loopExitBlock.NewRet(exitValue)
-
-	// Print the LLVM IR assembly code.
-	fmt.Println(module)
-}
-
 func (v *Visitor) VisitCompilationUnit(ctx *bp.CompilationUnitContext) interface{} {
-	// testModule()
 	v.Module = ir.NewModule()
 
 	for _, decl := range ctx.AllExternalDeclaration() {
@@ -404,10 +347,11 @@ func (v *Visitor) VisitMultiplicativeExpression(ctx *bp.MultiplicativeExpression
 }
 
 // castExpression
-//     :   '(' typeName ')' castExpression
-//     |   postfixExpression
-//     |   unaryExpression
-//     ;
+//
+//	:   '(' typeName ')' castExpression
+//	|   postfixExpression
+//	|   unaryExpression
+//	;
 func (v *Visitor) VisitCastExpression(ctx *bp.CastExpressionContext) value.Value {
 	if nodeCtx := ctx.PostfixExpression(); nodeCtx != nil {
 		return v.VisitPostfixExpression(nodeCtx.(*bp.PostfixExpressionContext))
@@ -434,7 +378,7 @@ func (v *Visitor) VisitUnaryExpression(ctx *bp.UnaryExpressionContext) value.Val
 			v.castCond(value),
 		)
 	case "+":
-		// pass			
+		// pass
 	}
 	return value
 }
@@ -461,10 +405,18 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 		panic(UnimplementedError(ctx.GetText()))
 	}
 
-	for _, nodeCtx := range ctx.AllExpression() {
-		idx := v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
-		arrPtr := toPtr(expr)
-		expr = v.block().NewGetElementPtr(arrPtr.ElemType, arrPtr, constant.NewInt(types.I64, 0), v.dereference(idx))
+	if len(ctx.AllExpression()) > 0 {
+		variable, ok := expr.(*ir.InstAlloca)
+		if !ok {
+			panic(ExpectedPtrError(expr))
+		}
+
+		indexes := []value.Value{constant.NewInt(types.I32, 0)}
+		for _, nodeCtx := range ctx.AllExpression() {
+			idx := v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
+			indexes = append(indexes, v.dereference(idx))
+		}
+		expr = v.block().NewGetElementPtr(variable.ElemType, variable, indexes...)
 	}
 	return expr
 }

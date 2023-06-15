@@ -75,14 +75,6 @@ func (v *Visitor) variable(name string) *ir.InstAlloca {
 	return nil
 }
 
-func toPtr(expr value.Value) *ir.InstAlloca {
-	if types.IsPointer(expr.Type()) {
-		return expr.(*ir.InstAlloca)
-	} else {
-		panic(ExpectedPtrError(expr))
-	}
-}
-
 func (v *Visitor) dereference(expr value.Value) value.Value {
 	if !types.IsPointer(expr.Type()) {
 		return expr
@@ -92,10 +84,25 @@ func (v *Visitor) dereference(expr value.Value) value.Value {
 		return v.block().NewLoad(ptr.ElemType, ptr)
 	}
 	if ptr, ok := expr.(*ir.InstGetElementPtr); ok {
-		arrType := ptr.ElemType.(*types.ArrayType)
-		return v.block().NewLoad(arrType.ElemType, ptr)
+		arrType := baseArrType(ptr)
+
+		arrElem := v.block().NewLoad(arrType.ElemType, ptr)
+		return v.dereference(arrElem)
 	}
 	return expr
+}
+
+func baseArrType(ptr *ir.InstGetElementPtr) *types.ArrayType {
+	arrType := ptr.ElemType.(*types.ArrayType)
+
+	for {
+		if elem, ok := arrType.ElemType.(*types.ArrayType); ok {
+			arrType = elem
+		} else {
+			break
+		}
+	}
+	return arrType
 }
 
 func (v *Visitor) sameT(expr, nextExpr value.Value) (value.Value, value.Value) {
