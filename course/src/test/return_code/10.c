@@ -1,5 +1,3 @@
-/* Hello World program */
-
 int main() {
     int a = 30;
     int b = 20;
@@ -18,5 +16,6 @@ int main() {
         result = temp * 3;
         return result;
     }
+    // TODO: no return here
     return result;
 }
