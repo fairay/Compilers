@@ -128,3 +128,15 @@
 \newcommand{\TODO}{\textcolor{red}}
 
 \usepackage{pdfpages}
+
+
+% Своё изображение
+\newcommand{\myImage}[3]{
+  \noindent\begin{minipage}{\linewidth}
+    \centering
+    \captionsetup{type=figure}
+    \includegraphics[width=\textwidth]{#1}
+    \caption{#2}
+    \label{#3}
+  \end{minipage}
+}
