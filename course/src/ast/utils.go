@@ -65,6 +65,37 @@ func (v *Visitor) newVariable(t types.Type, name string) *ir.InstAlloca {
 	return ptr
 }
 
+func (v *Visitor) identifier(name string) value.Named {
+	if id := v.variable(name); id != nil {
+		return id
+	}
+	if id := v.argumentId(name); id != nil {
+		return id
+	}
+	if id := v.funcId(name); id != nil {
+		return id
+	}
+	return nil
+}
+
+func (v *Visitor) funcId(name string) *ir.Func {
+	for _, function := range v.Module.Funcs {
+		if function.Name() == name {
+			return function
+		}
+	}
+	return nil
+}
+
+func (v *Visitor) argumentId(name string) *ir.Param {
+	for _, param := range v.Function.Params {
+		if param.Name() == name {
+			return param
+		}
+	}
+	return nil
+}
+
 func (v *Visitor) variable(name string) *ir.InstAlloca {
 	for i := len(v.varScopes) - 1; i >= 0; i = i - 1 {
 		scope := v.varScopes[i]

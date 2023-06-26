@@ -19,8 +19,8 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#postfixExpression.
 	VisitPostfixExpression(ctx *PostfixExpressionContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#argumentExpressionList.
-	VisitArgumentExpressionList(ctx *ArgumentExpressionListContext) interface{}
+	// Visit a parse tree produced by tinycParser#funcCall.
+	VisitFuncCall(ctx *FuncCallContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#unaryExpression.
 	VisitUnaryExpression(ctx *UnaryExpressionContext) interface{}
@@ -84,12 +84,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#declarator.
 	VisitDeclarator(ctx *DeclaratorContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#gccAttribute.
-	VisitGccAttribute(ctx *GccAttributeContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#nestedParenthesesBlock.
-	VisitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#parameterTypeList.
 	VisitParameterTypeList(ctx *ParameterTypeListContext) interface{}

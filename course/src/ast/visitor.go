@@ -19,6 +19,7 @@ type Visitor struct {
 	bp.BasetinycVisitor
 
 	Module      *ir.Module
+	Function	*ir.Func
 	mainBlock   *ir.Block
 	blocks      []*ir.Block
 	varScopes   []VarScope
@@ -47,18 +48,28 @@ func (v *Visitor) VisitExternalDeclaration(ctx *bp.ExternalDeclarationContext) i
 	return nil
 }
 
+// functionDefinition
+//     :   declarationSpecifiers? Identifier '(' parameterList ')' declarationList? compoundStatement
+//     ;
 func (v *Visitor) VisitFunctionDefinition(ctx *bp.FunctionDefinitionContext) interface{} {
-	retType := types.I32           // TODO: VisitDeclarationSpecifiers
-	name := "main"                 // TODO: VisitDeclarator
-	params := make([]*ir.Param, 0) // TODO: VisitDeclarationList
-	function := v.Module.NewFunc(name, retType, params...)
 
-	block := function.NewBlock("main")
+	retType := v.VisitDeclarationSpecifiers(
+		ctx.DeclarationSpecifiers().(*bp.DeclarationSpecifiersContext),
+	)
+	name := ctx.Identifier().GetText()
+
+	params := v.VisitParameterList(ctx.ParameterList().(*bp.ParameterListContext))
+	// params := make([]*ir.Param, 0) // TODO: VisitDeclarationList
+
+	v.Function = v.Module.NewFunc(name, retType, params...)
+	block := v.Function.NewBlock("main")
 	v.pushBlock(block)
+
 	compoundStatement := ctx.CompoundStatement()
 	v.VisitCompoundStatement(compoundStatement.(*bp.CompoundStatementContext))
-	v.popBlock(block)
 
+	v.popBlock(block)
+	v.Function = nil
 	return nil
 }
 
@@ -384,15 +395,12 @@ func (v *Visitor) VisitUnaryExpression(ctx *bp.UnaryExpressionContext) value.Val
 }
 
 // postfixExpression
-//
-//	:
-//	(   primaryExpression
-//	|   '(' typeName ')' '{' initializerList ','? '}'
-//	)
-//	('[' expression ']'
-//	| '(' argumentExpressionList? ')'
-//	)*
-//	;
+//     :
+//     (   primaryExpression
+//     |   '(' typeName ')' '{' initializerList ','? '}'
+//     )
+//     ('[' expression ']' | funcCall)*
+//     ;
 func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value.Value {
 	var expr value.Value
 	if nodeCtx := ctx.PrimaryExpression(); nodeCtx != nil {
@@ -401,11 +409,11 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 		panic(UnimplementedError(ctx.GetText()))
 	}
 
-	for range ctx.AllArgumentExpressionList() {
-		panic(UnimplementedError(ctx.GetText()))
-	}
-
-	if len(ctx.AllExpression()) > 0 {
+	if len(ctx.AllFuncCall()) > 0 {
+		argsCtx := ctx.FuncCall(0)
+		args := v.VisitFuncCall(argsCtx.(*bp.FuncCallContext))
+		expr = v.block().NewCall(expr, args...)
+	} else if len(ctx.AllExpression()) > 0 {
 		variable, ok := expr.(*ir.InstAlloca)
 		if !ok {
 			panic(ExpectedPtrError(expr))
@@ -419,6 +427,15 @@ func (v *Visitor) VisitPostfixExpression(ctx *bp.PostfixExpressionContext) value
 		expr = v.block().NewGetElementPtr(variable.ElemType, variable, indexes...)
 	}
 	return expr
+}
+
+// funcCall: '(' (assignmentExpression (',' assignmentExpression)*)? ')';
+func (v *Visitor) VisitFuncCall(ctx *bp.FuncCallContext) []value.Value {
+	args := make([]value.Value, len(ctx.AllAssignmentExpression()))
+	for i, argCtx := range ctx.AllAssignmentExpression() {
+		args[i] = v.VisitAssignmentExpression(argCtx.(*bp.AssignmentExpressionContext))
+	}
+	return args
 }
 
 // primaryExpression
@@ -439,7 +456,7 @@ func (v *Visitor) VisitPrimaryExpression(ctx *bp.PrimaryExpressionContext) value
 		return v.VisitExpression(nodeCtx.(*bp.ExpressionContext))
 	} else if nodeCtx := ctx.Identifier(); nodeCtx != nil {
 		name := ctx.GetText()
-		id := v.variable(name)
+		id := v.identifier(name)
 		if id == nil {
 			panic(UndefindedError(name))
 		}

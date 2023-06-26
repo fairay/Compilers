@@ -19,8 +19,8 @@ type tinycListener interface {
 	// EnterPostfixExpression is called when entering the postfixExpression production.
 	EnterPostfixExpression(c *PostfixExpressionContext)
 
-	// EnterArgumentExpressionList is called when entering the argumentExpressionList production.
-	EnterArgumentExpressionList(c *ArgumentExpressionListContext)
+	// EnterFuncCall is called when entering the funcCall production.
+	EnterFuncCall(c *FuncCallContext)
 
 	// EnterUnaryExpression is called when entering the unaryExpression production.
 	EnterUnaryExpression(c *UnaryExpressionContext)
@@ -84,12 +84,6 @@ type tinycListener interface {
 
 	// EnterDeclarator is called when entering the declarator production.
 	EnterDeclarator(c *DeclaratorContext)
-
-	// EnterGccAttribute is called when entering the gccAttribute production.
-	EnterGccAttribute(c *GccAttributeContext)
-
-	// EnterNestedParenthesesBlock is called when entering the nestedParenthesesBlock production.
-	EnterNestedParenthesesBlock(c *NestedParenthesesBlockContext)
 
 	// EnterParameterTypeList is called when entering the parameterTypeList production.
 	EnterParameterTypeList(c *ParameterTypeListContext)
@@ -172,8 +166,8 @@ type tinycListener interface {
 	// ExitPostfixExpression is called when exiting the postfixExpression production.
 	ExitPostfixExpression(c *PostfixExpressionContext)
 
-	// ExitArgumentExpressionList is called when exiting the argumentExpressionList production.
-	ExitArgumentExpressionList(c *ArgumentExpressionListContext)
+	// ExitFuncCall is called when exiting the funcCall production.
+	ExitFuncCall(c *FuncCallContext)
 
 	// ExitUnaryExpression is called when exiting the unaryExpression production.
 	ExitUnaryExpression(c *UnaryExpressionContext)
@@ -237,12 +231,6 @@ type tinycListener interface {
 
 	// ExitDeclarator is called when exiting the declarator production.
 	ExitDeclarator(c *DeclaratorContext)
-
-	// ExitGccAttribute is called when exiting the gccAttribute production.
-	ExitGccAttribute(c *GccAttributeContext)
-
-	// ExitNestedParenthesesBlock is called when exiting the nestedParenthesesBlock production.
-	ExitNestedParenthesesBlock(c *NestedParenthesesBlockContext)
 
 	// ExitParameterTypeList is called when exiting the parameterTypeList production.
 	ExitParameterTypeList(c *ParameterTypeListContext)

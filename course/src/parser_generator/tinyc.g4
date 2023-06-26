@@ -50,21 +50,16 @@ postfixExpression
     (   primaryExpression
     |   '(' typeName ')' '{' initializerList ','? '}'
     )
-    ('[' expression ']'
-    | '(' argumentExpressionList? ')'
-    )*
+    ('[' expression ']' | funcCall)*
     ;
 
-argumentExpressionList
-    :   assignmentExpression (',' assignmentExpression)*
-    ;
+funcCall: '(' (assignmentExpression (',' assignmentExpression)*)? ')';
 
 unaryExpression: unaryOperator castExpression;
 
 unaryOperator
     :   
     '+' | '-' | '!'
-    // | '&' | '*' | '~'
     ;
 
 castExpression
@@ -147,22 +142,8 @@ declarator
     :   Identifier
     |   '(' declarator ')'
     |   declarator '[' assignmentExpression? ']'
-    |   declarator '(' parameterTypeList ')'
     |   declarator '(' identifierList? ')'
     ;
-
-
-gccAttribute
-    :   ~(',' | '(' | ')') // relaxed def for "identifier or reserved word"
-        ('(' argumentExpressionList? ')')?
-    ;
-
-nestedParenthesesBlock
-    :   (   ~('(' | ')')
-        |   '(' nestedParenthesesBlock ')'
-        )*
-    ;
-
 
 parameterTypeList
     :   parameterList (',' '...')?
@@ -170,10 +151,11 @@ parameterTypeList
 
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
+    |
     ;
 
 parameterDeclaration
-    :   declarationSpecifiers (declarator | abstractDeclarator?)
+    :   declarationSpecifiers declarator
     ;
 
 identifierList
@@ -276,7 +258,7 @@ externalDeclaration
     ;
 
 functionDefinition
-    :   declarationSpecifiers? declarator declarationList? compoundStatement
+    :   declarationSpecifiers? Identifier '(' parameterList ')' declarationList? compoundStatement
     ;
 
 declarationList

@@ -44,11 +44,11 @@ func (s *BasetinycListener) EnterPostfixExpression(ctx *PostfixExpressionContext
 // ExitPostfixExpression is called when production postfixExpression is exited.
 func (s *BasetinycListener) ExitPostfixExpression(ctx *PostfixExpressionContext) {}
 
-// EnterArgumentExpressionList is called when production argumentExpressionList is entered.
-func (s *BasetinycListener) EnterArgumentExpressionList(ctx *ArgumentExpressionListContext) {}
+// EnterFuncCall is called when production funcCall is entered.
+func (s *BasetinycListener) EnterFuncCall(ctx *FuncCallContext) {}
 
-// ExitArgumentExpressionList is called when production argumentExpressionList is exited.
-func (s *BasetinycListener) ExitArgumentExpressionList(ctx *ArgumentExpressionListContext) {}
+// ExitFuncCall is called when production funcCall is exited.
+func (s *BasetinycListener) ExitFuncCall(ctx *FuncCallContext) {}
 
 // EnterUnaryExpression is called when production unaryExpression is entered.
 func (s *BasetinycListener) EnterUnaryExpression(ctx *UnaryExpressionContext) {}
@@ -175,18 +175,6 @@ func (s *BasetinycListener) EnterDeclarator(ctx *DeclaratorContext) {}
 
 // ExitDeclarator is called when production declarator is exited.
 func (s *BasetinycListener) ExitDeclarator(ctx *DeclaratorContext) {}
-
-// EnterGccAttribute is called when production gccAttribute is entered.
-func (s *BasetinycListener) EnterGccAttribute(ctx *GccAttributeContext) {}
-
-// ExitGccAttribute is called when production gccAttribute is exited.
-func (s *BasetinycListener) ExitGccAttribute(ctx *GccAttributeContext) {}
-
-// EnterNestedParenthesesBlock is called when production nestedParenthesesBlock is entered.
-func (s *BasetinycListener) EnterNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) {}
-
-// ExitNestedParenthesesBlock is called when production nestedParenthesesBlock is exited.
-func (s *BasetinycListener) ExitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) {}
 
 // EnterParameterTypeList is called when production parameterTypeList is entered.
 func (s *BasetinycListener) EnterParameterTypeList(ctx *ParameterTypeListContext) {}

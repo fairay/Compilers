@@ -3,6 +3,7 @@ package ast
 import (
 	bp "course/compilers/parser" // baseparser
 
+	"github.com/llir/llvm/ir"
 	"github.com/llir/llvm/ir/constant"
 	"github.com/llir/llvm/ir/types"
 	"github.com/llir/llvm/ir/value"
@@ -79,7 +80,6 @@ func (v *Visitor) VisitInitDeclarator(ctx *bp.InitDeclaratorContext) interface{}
 //	:   Identifier
 //	|   '(' declarator ')'
 //	|   declarator '[' assignmentExpression? ']'
-//	|   declarator '(' parameterTypeList ')'
 //	|   declarator '(' identifierList? ')'
 //	;
 func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) (types.Type, string) {
@@ -101,6 +101,16 @@ func (v *Visitor) VisitDeclarator(ctx *bp.DeclaratorContext) (types.Type, string
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
+	// } else if paramsCtx := ctx.ParameterTypeList(); paramsCtx != nil {
+	// 	panic(UnimplementedError(ctx.GetText()))
+	// } else {
+	// 	// declarator '(' identifierList? ')'
+	// 	if idListCtx := ctx.IdentifierList(); idListCtx != nil {
+	// 		panic(UnimplementedError(ctx.GetText()))
+	// 	}
+	// 	name := ctx.Declarator().GetText()
+	// 	return t, name
+	// }
 }
 
 // initializer
@@ -114,4 +124,28 @@ func (v *Visitor) VisitInitializer(ctx *bp.InitializerContext) value.Value {
 	} else {
 		panic(UnimplementedError(ctx.GetText()))
 	}
+}
+
+// parameterList
+//     :   parameterDeclaration (',' parameterDeclaration)*
+//     ;
+func (v *Visitor) VisitParameterList(ctx *bp.ParameterListContext) []*ir.Param {
+	params := make([]*ir.Param, len(ctx.AllParameterDeclaration()))
+	for i, paramCtx := range ctx.AllParameterDeclaration() {
+		params[i] = v.VisitParameterDeclaration(paramCtx.(*bp.ParameterDeclarationContext))
+	}
+	return params
+}
+
+// parameterDeclaration
+//     :   declarationSpecifiers declarator
+//     ;
+func (v *Visitor) VisitParameterDeclaration(ctx *bp.ParameterDeclarationContext) *ir.Param {
+	declSpecCtx := ctx.DeclarationSpecifiers()
+	declCtx := ctx.Declarator()
+	
+	v.curDeclType = v.VisitDeclarationSpecifiers(declSpecCtx.(*bp.DeclarationSpecifiersContext))
+	t, name := v.VisitDeclarator(declCtx.(*bp.DeclaratorContext))
+	v.curDeclType = nil
+	return ir.NewParam(name, t)
 }

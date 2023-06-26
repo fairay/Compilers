@@ -23,7 +23,7 @@ func (v *BasetinycVisitor) VisitPostfixExpression(ctx *PostfixExpressionContext)
 	return v.VisitChildren(ctx)
 }
 
-func (v *BasetinycVisitor) VisitArgumentExpressionList(ctx *ArgumentExpressionListContext) interface{} {
+func (v *BasetinycVisitor) VisitFuncCall(ctx *FuncCallContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -108,14 +108,6 @@ func (v *BasetinycVisitor) VisitStructDeclarator(ctx *StructDeclaratorContext) i
 }
 
 func (v *BasetinycVisitor) VisitDeclarator(ctx *DeclaratorContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitGccAttribute(ctx *GccAttributeContext) interface{} {
-	return v.VisitChildren(ctx)
-}
-
-func (v *BasetinycVisitor) VisitNestedParenthesesBlock(ctx *NestedParenthesesBlockContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
