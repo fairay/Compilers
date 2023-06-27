@@ -10,12 +10,6 @@ type tinycListener interface {
 	// EnterPrimaryExpression is called when entering the primaryExpression production.
 	EnterPrimaryExpression(c *PrimaryExpressionContext)
 
-	// EnterGenericAssocList is called when entering the genericAssocList production.
-	EnterGenericAssocList(c *GenericAssocListContext)
-
-	// EnterGenericAssociation is called when entering the genericAssociation production.
-	EnterGenericAssociation(c *GenericAssociationContext)
-
 	// EnterPostfixExpression is called when entering the postfixExpression production.
 	EnterPostfixExpression(c *PostfixExpressionContext)
 
@@ -73,9 +67,6 @@ type tinycListener interface {
 	// EnterTypeSpecifier is called when entering the typeSpecifier production.
 	EnterTypeSpecifier(c *TypeSpecifierContext)
 
-	// EnterSpecifierQualifierList is called when entering the specifierQualifierList production.
-	EnterSpecifierQualifierList(c *SpecifierQualifierListContext)
-
 	// EnterStructDeclaratorList is called when entering the structDeclaratorList production.
 	EnterStructDeclaratorList(c *StructDeclaratorListContext)
 
@@ -85,9 +76,6 @@ type tinycListener interface {
 	// EnterDeclarator is called when entering the declarator production.
 	EnterDeclarator(c *DeclaratorContext)
 
-	// EnterParameterTypeList is called when entering the parameterTypeList production.
-	EnterParameterTypeList(c *ParameterTypeListContext)
-
 	// EnterParameterList is called when entering the parameterList production.
 	EnterParameterList(c *ParameterListContext)
 
@@ -96,12 +84,6 @@ type tinycListener interface {
 
 	// EnterIdentifierList is called when entering the identifierList production.
 	EnterIdentifierList(c *IdentifierListContext)
-
-	// EnterTypeName is called when entering the typeName production.
-	EnterTypeName(c *TypeNameContext)
-
-	// EnterAbstractDeclarator is called when entering the abstractDeclarator production.
-	EnterAbstractDeclarator(c *AbstractDeclaratorContext)
 
 	// EnterInitializer is called when entering the initializer production.
 	EnterInitializer(c *InitializerContext)
@@ -156,12 +138,6 @@ type tinycListener interface {
 
 	// ExitPrimaryExpression is called when exiting the primaryExpression production.
 	ExitPrimaryExpression(c *PrimaryExpressionContext)
-
-	// ExitGenericAssocList is called when exiting the genericAssocList production.
-	ExitGenericAssocList(c *GenericAssocListContext)
-
-	// ExitGenericAssociation is called when exiting the genericAssociation production.
-	ExitGenericAssociation(c *GenericAssociationContext)
 
 	// ExitPostfixExpression is called when exiting the postfixExpression production.
 	ExitPostfixExpression(c *PostfixExpressionContext)
@@ -220,9 +196,6 @@ type tinycListener interface {
 	// ExitTypeSpecifier is called when exiting the typeSpecifier production.
 	ExitTypeSpecifier(c *TypeSpecifierContext)
 
-	// ExitSpecifierQualifierList is called when exiting the specifierQualifierList production.
-	ExitSpecifierQualifierList(c *SpecifierQualifierListContext)
-
 	// ExitStructDeclaratorList is called when exiting the structDeclaratorList production.
 	ExitStructDeclaratorList(c *StructDeclaratorListContext)
 
@@ -232,9 +205,6 @@ type tinycListener interface {
 	// ExitDeclarator is called when exiting the declarator production.
 	ExitDeclarator(c *DeclaratorContext)
 
-	// ExitParameterTypeList is called when exiting the parameterTypeList production.
-	ExitParameterTypeList(c *ParameterTypeListContext)
-
 	// ExitParameterList is called when exiting the parameterList production.
 	ExitParameterList(c *ParameterListContext)
 
@@ -243,12 +213,6 @@ type tinycListener interface {
 
 	// ExitIdentifierList is called when exiting the identifierList production.
 	ExitIdentifierList(c *IdentifierListContext)
-
-	// ExitTypeName is called when exiting the typeName production.
-	ExitTypeName(c *TypeNameContext)
-
-	// ExitAbstractDeclarator is called when exiting the abstractDeclarator production.
-	ExitAbstractDeclarator(c *AbstractDeclaratorContext)
 
 	// ExitInitializer is called when exiting the initializer production.
 	ExitInitializer(c *InitializerContext)

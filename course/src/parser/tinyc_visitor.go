@@ -10,12 +10,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#primaryExpression.
 	VisitPrimaryExpression(ctx *PrimaryExpressionContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#genericAssocList.
-	VisitGenericAssocList(ctx *GenericAssocListContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#genericAssociation.
-	VisitGenericAssociation(ctx *GenericAssociationContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#postfixExpression.
 	VisitPostfixExpression(ctx *PostfixExpressionContext) interface{}
 
@@ -73,9 +67,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#typeSpecifier.
 	VisitTypeSpecifier(ctx *TypeSpecifierContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#specifierQualifierList.
-	VisitSpecifierQualifierList(ctx *SpecifierQualifierListContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#structDeclaratorList.
 	VisitStructDeclaratorList(ctx *StructDeclaratorListContext) interface{}
 
@@ -85,9 +76,6 @@ type tinycVisitor interface {
 	// Visit a parse tree produced by tinycParser#declarator.
 	VisitDeclarator(ctx *DeclaratorContext) interface{}
 
-	// Visit a parse tree produced by tinycParser#parameterTypeList.
-	VisitParameterTypeList(ctx *ParameterTypeListContext) interface{}
-
 	// Visit a parse tree produced by tinycParser#parameterList.
 	VisitParameterList(ctx *ParameterListContext) interface{}
 
@@ -96,12 +84,6 @@ type tinycVisitor interface {
 
 	// Visit a parse tree produced by tinycParser#identifierList.
 	VisitIdentifierList(ctx *IdentifierListContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#typeName.
-	VisitTypeName(ctx *TypeNameContext) interface{}
-
-	// Visit a parse tree produced by tinycParser#abstractDeclarator.
-	VisitAbstractDeclarator(ctx *AbstractDeclaratorContext) interface{}
 
 	// Visit a parse tree produced by tinycParser#initializer.
 	VisitInitializer(ctx *InitializerContext) interface{}

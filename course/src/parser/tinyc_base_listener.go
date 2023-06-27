@@ -26,18 +26,6 @@ func (s *BasetinycListener) EnterPrimaryExpression(ctx *PrimaryExpressionContext
 // ExitPrimaryExpression is called when production primaryExpression is exited.
 func (s *BasetinycListener) ExitPrimaryExpression(ctx *PrimaryExpressionContext) {}
 
-// EnterGenericAssocList is called when production genericAssocList is entered.
-func (s *BasetinycListener) EnterGenericAssocList(ctx *GenericAssocListContext) {}
-
-// ExitGenericAssocList is called when production genericAssocList is exited.
-func (s *BasetinycListener) ExitGenericAssocList(ctx *GenericAssocListContext) {}
-
-// EnterGenericAssociation is called when production genericAssociation is entered.
-func (s *BasetinycListener) EnterGenericAssociation(ctx *GenericAssociationContext) {}
-
-// ExitGenericAssociation is called when production genericAssociation is exited.
-func (s *BasetinycListener) ExitGenericAssociation(ctx *GenericAssociationContext) {}
-
 // EnterPostfixExpression is called when production postfixExpression is entered.
 func (s *BasetinycListener) EnterPostfixExpression(ctx *PostfixExpressionContext) {}
 
@@ -152,12 +140,6 @@ func (s *BasetinycListener) EnterTypeSpecifier(ctx *TypeSpecifierContext) {}
 // ExitTypeSpecifier is called when production typeSpecifier is exited.
 func (s *BasetinycListener) ExitTypeSpecifier(ctx *TypeSpecifierContext) {}
 
-// EnterSpecifierQualifierList is called when production specifierQualifierList is entered.
-func (s *BasetinycListener) EnterSpecifierQualifierList(ctx *SpecifierQualifierListContext) {}
-
-// ExitSpecifierQualifierList is called when production specifierQualifierList is exited.
-func (s *BasetinycListener) ExitSpecifierQualifierList(ctx *SpecifierQualifierListContext) {}
-
 // EnterStructDeclaratorList is called when production structDeclaratorList is entered.
 func (s *BasetinycListener) EnterStructDeclaratorList(ctx *StructDeclaratorListContext) {}
 
@@ -176,12 +158,6 @@ func (s *BasetinycListener) EnterDeclarator(ctx *DeclaratorContext) {}
 // ExitDeclarator is called when production declarator is exited.
 func (s *BasetinycListener) ExitDeclarator(ctx *DeclaratorContext) {}
 
-// EnterParameterTypeList is called when production parameterTypeList is entered.
-func (s *BasetinycListener) EnterParameterTypeList(ctx *ParameterTypeListContext) {}
-
-// ExitParameterTypeList is called when production parameterTypeList is exited.
-func (s *BasetinycListener) ExitParameterTypeList(ctx *ParameterTypeListContext) {}
-
 // EnterParameterList is called when production parameterList is entered.
 func (s *BasetinycListener) EnterParameterList(ctx *ParameterListContext) {}
 
@@ -199,18 +175,6 @@ func (s *BasetinycListener) EnterIdentifierList(ctx *IdentifierListContext) {}
 
 // ExitIdentifierList is called when production identifierList is exited.
 func (s *BasetinycListener) ExitIdentifierList(ctx *IdentifierListContext) {}
-
-// EnterTypeName is called when production typeName is entered.
-func (s *BasetinycListener) EnterTypeName(ctx *TypeNameContext) {}
-
-// ExitTypeName is called when production typeName is exited.
-func (s *BasetinycListener) ExitTypeName(ctx *TypeNameContext) {}
-
-// EnterAbstractDeclarator is called when production abstractDeclarator is entered.
-func (s *BasetinycListener) EnterAbstractDeclarator(ctx *AbstractDeclaratorContext) {}
-
-// ExitAbstractDeclarator is called when production abstractDeclarator is exited.
-func (s *BasetinycListener) ExitAbstractDeclarator(ctx *AbstractDeclaratorContext) {}
 
 // EnterInitializer is called when production initializer is entered.
 func (s *BasetinycListener) EnterInitializer(ctx *InitializerContext) {}

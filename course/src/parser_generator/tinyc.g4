@@ -36,108 +36,40 @@ primaryExpression
     |   StringLiteral+
     |   '(' expression ')'
     ;
-
-genericAssocList
-    :   genericAssociation (',' genericAssociation)*
-    ;
-
-genericAssociation
-    :   typeName ':' assignmentExpression
-    ;
-
-postfixExpression
-    :
-    (   primaryExpression
-    |   '(' typeName ')' '{' initializerList ','? '}'
-    )
-    ('[' expression ']' | funcCall)*
-    ;
-
+postfixExpression: primaryExpression ('[' expression ']' | funcCall)*;
 funcCall: '(' (assignmentExpression (',' assignmentExpression)*)? ')';
-
 unaryExpression: unaryOperator castExpression;
-
-unaryOperator
-    :   
-    '+' | '-' | '!'
-    ;
-
+unaryOperator: '+' | '-' | '!';
 castExpression
-    :   '(' typeName ')' castExpression
-    |   postfixExpression
+    :   postfixExpression
     |   unaryExpression
     ;
-
-multiplicativeExpression
-    :   castExpression (('*'|'/'|'%') castExpression)*
-    ;
-
-additiveExpression
-    :   multiplicativeExpression (('+'|'-') multiplicativeExpression)*
-    ;
-
-relationalExpression
-    :   additiveExpression (('<'|'>'|'<='|'>=') additiveExpression)*
-    ;
-
-equalityExpression
-    :   relationalExpression (('=='| '!=') relationalExpression)*
-    ;
-
-logicalAndExpression
-    :   equalityExpression ('&&' equalityExpression)*
-    ;
-
-logicalOrExpression
-    :   logicalAndExpression ( '||' logicalAndExpression)*
-    ;
-
+multiplicativeExpression: castExpression (('*'|'/'|'%') castExpression)*;
+additiveExpression: multiplicativeExpression (('+'|'-') multiplicativeExpression)*;
+relationalExpression:   additiveExpression (('<'|'>'|'<='|'>=') additiveExpression)*;
+equalityExpression:   relationalExpression (('=='| '!=') relationalExpression)*;
+logicalAndExpression:   equalityExpression ('&&' equalityExpression)*;
+logicalOrExpression:   logicalAndExpression ( '||' logicalAndExpression)*;
 assignmentExpression
     :   logicalOrExpression
     |   postfixExpression assignmentOperator assignmentExpression
     ;
-
 assignmentOperator: '=';
-
-expression
-    :   assignmentExpression (',' assignmentExpression)*
-    ;
-
-declaration
-    :   declarationSpecifiers initDeclaratorList? ';'
-    ;
-
-declarationSpecifiers
-    :   typeSpecifier+
-    ;
-
-initDeclaratorList
-    :   initDeclarator (',' initDeclarator)*
-    ;
-
-initDeclarator
-    :   declarator ('=' initializer)?
-    ;
-
+expression:   assignmentExpression (',' assignmentExpression)*;
+declaration:   declarationSpecifiers initDeclaratorList? ';';
+declarationSpecifiers:   typeSpecifier+;
+initDeclaratorList:   initDeclarator (',' initDeclarator)*;
+initDeclarator:   declarator ('=' initializer)?;
 typeSpecifier
     :   'char'
     |   'int'
     |   'float'
     ;
-
-specifierQualifierList
-    :   typeSpecifier specifierQualifierList?
-    ;
-
-structDeclaratorList
-    :   structDeclarator (',' structDeclarator)*
-    ;
-
+structDeclaratorList:   structDeclarator (',' structDeclarator)*;
 structDeclarator
     :   declarator
     |   declarator? ':' logicalOrExpression
     ;
-
 declarator
     :   Identifier
     |   '(' declarator ')'
@@ -145,59 +77,23 @@ declarator
     |   declarator '(' identifierList? ')'
     ;
 
-parameterTypeList
-    :   parameterList (',' '...')?
-    ;
-
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
     |
     ;
-
-parameterDeclaration
-    :   declarationSpecifiers declarator
-    ;
-
-identifierList
-    :   Identifier (',' Identifier)*
-    ;
-
-typeName
-    :   specifierQualifierList abstractDeclarator?
-    ;
-
-abstractDeclarator
-    :   '(' abstractDeclarator ')'
-    |   '[' assignmentExpression? ']'
-    |   '[' '*' ']'
-    |   '(' parameterTypeList? ')'
-    |   abstractDeclarator '[' assignmentExpression? ']'
-    |   abstractDeclarator '[' '*' ']'
-    |   abstractDeclarator '(' parameterTypeList? ')'
-    ;
-
+parameterDeclaration:   declarationSpecifiers declarator;
+identifierList:   Identifier (',' Identifier)*;
 initializer
     :   assignmentExpression
     |   '{' initializerList ','? '}'
     ;
-
-initializerList
-    :   designation? initializer (',' designation? initializer)*
-    ;
-
-designation
-    :   designatorList '='
-    ;
-
-designatorList
-    :   designator+
-    ;
-
+initializerList:   designation? initializer (',' designation? initializer)*;
+designation:   designatorList '=';
+designatorList:   designator+;
 designator
     :   '[' logicalOrExpression ']'
     |   '.' Identifier
     ;
-
 statement
     :   labeledStatement
     |   compoundStatement
@@ -206,23 +102,15 @@ statement
     |   iterationStatement
     |   jumpStatement
     ;
-
-labeledStatement
-    :   Identifier ':' statement
-    ;
-
+labeledStatement:   Identifier ':' statement;
 compoundStatement
     :   '{' blockItem* '}'
     ;
-
 blockItem
     :   statement
     |   declaration
     ;
-
-expressionStatement
-    :   expression? ';'
-    ;
+expressionStatement:   expression? ';';
 
 selectionStatement
     :   'if' '(' expression ')' statement ('else' statement)?
@@ -231,19 +119,6 @@ selectionStatement
 iterationStatement
     :   While '(' expression ')' statement
     ;
-
-//    |   'for' '(' expression? ';' expression?  ';' forUpdate? ')' statement
-//    |   For '(' declaration  expression? ';' expression? ')' statement
-
-// jumpStatement
-//     :   ('goto' Identifier
-//     |   'continue'
-//     |   'break'
-//     |   'return' expression?
-//     |   'goto' postfixExpression // GCC extension
-//     )
-//     ';'
-//     ;
 
 jumpStatement: 'return' expression ';' ;
 
@@ -265,52 +140,29 @@ declarationList
     :   declaration+
     ;
 
-Auto : 'auto';
-Break : 'break';
 Char : 'char';
 Const : 'const';
-Continue : 'continue';
 Else : 'else';
-Extern : 'extern';
 Float : 'float';
-Goto : 'goto';
 If : 'if';
-Inline : 'inline';
 Int : 'int';
-Register : 'register';
-Restrict : 'restrict';
 Return : 'return';
-Sizeof : 'sizeof';
-Struct : 'struct';
-Switch : 'switch';
-Typedef : 'typedef';
-Union : 'union';
 While : 'while';
-
-Noreturn : '_Noreturn';
-
 LeftParen : '(';
 RightParen : ')';
 LeftBracket : '[';
 RightBracket : ']';
 LeftBrace : '{';
 RightBrace : '}';
-
 Less : '<';
 LessEqual : '<=';
 Greater : '>';
 GreaterEqual : '>=';
-LeftShift : '<<';
-RightShift : '>>';
-
 Plus : '+';
-PlusPlus : '++';
 Minus : '-';
-MinusMinus : '--';
 Star : '*';
 Div : '/';
 Mod : '%';
-
 And : '&';
 Or : '|';
 AndAnd : '&&';
@@ -318,20 +170,13 @@ OrOr : '||';
 Caret : '^';
 Not : '!';
 Tilde : '~';
-
 Question : '?';
 Colon : ':';
 Semi : ';';
 Comma : ',';
-
 Assign : '=';
-
 Equal : '==';
 NotEqual : '!=';
-
-Arrow : '->';
-Dot : '.';
-Ellipsis : '...';
 
 Identifier
     :   IdentifierNondigit
@@ -481,12 +326,7 @@ FloatingSuffix
     ;
 
 fragment
-CharacterConstant
-    :   '\'' CCharSequence '\''
-    |   'L\'' CCharSequence '\''
-    |   'u\'' CCharSequence '\''
-    |   'U\'' CCharSequence '\''
-    ;
+CharacterConstant:   '\'' CCharSequence '\'';
 
 fragment
 CCharSequence
@@ -523,15 +363,7 @@ HexadecimalEscapeSequence
     ;
 
 StringLiteral
-    :   EncodingPrefix? '"' SCharSequence? '"'
-    ;
-
-fragment
-EncodingPrefix
-    :   'u8'
-    |   'u'
-    |   'U'
-    |   'L'
+    :   '"' SCharSequence? '"'
     ;
 
 fragment
@@ -547,42 +379,9 @@ SChar
     |   '\\\r\n' // Added line
     ;
 
-ComplexDefine
-    :   '#' Whitespace? 'define'  ~[#\r\n]*
-        -> skip
-    ;
-
-IncludeDirective
-    :   '#' Whitespace? 'include' Whitespace? ('"' ~[\r\n]* '"' | '<' ~[\r\n]* '>' ) Whitespace? Newline
-        -> skip
-    ;
-
-// ignore the following asm blocks:
-/*
-    asm
-    {
-        mfspr x, 286;
-    }
- */
-AsmBlock
-    :   'asm' ~'{'* '{' ~'}'* '}'
-	-> skip
-    ;
-
-// ignore the lines generated by c preprocessor
-// sample line : '#line 1 "/home/dm/files/dk1.h" 1'
-LineAfterPreprocessing
-    :   '#line' Whitespace* ~[\r\n]*
-        -> skip
-    ;
 
 LineDirective
     :   '#' Whitespace? DecimalConstant Whitespace? StringLiteral ~[\r\n]*
-        -> skip
-    ;
-
-PragmaDirective
-    :   '#' Whitespace? 'pragma' Whitespace ~[\r\n]*
         -> skip
     ;
 
